@@ -1,0 +1,361 @@
+% Da página da FAPESP: 
+%
+% O projeto de pesquisa deve ser apresentado de maneira clara e
+% resumida, ocupando no máximo 20 páginas datilografadas em espaço
+% duplo. Para propostas encaminhadas através do Sistema de Apoio a
+% Gestão (SAGe), deve anexar documento tipo DOC ou PDF de até 5Mb.
+% 
+% Deve compreender:
+% 
+%     * Resumo (máximo 20 linhas);
+%     * Introdução e justificativa, com síntese da bibliografia fundamental;
+%     * Objetivos;
+%     * Plano de trabalho e cronograma de sua execução;
+%     * Material e métodos;
+%     * Forma de análise dos resultados. 
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+
+%% Floating package
+\usepackage{floatflt,epsfig,epsf}
+\usepackage[dvipsnames]{xcolor}
+
+\newtheorem{defini}{Definição}[section]
+\newtheorem{prob}{Problema}[section] %[defini]
+\newcommand{\Oh}{\mathrm{O}}
+
+% \setlength{\parskip}{0.1cm}
+
+\begin{document}
+\begin{center}
+
+  
+{\Large {\bf Conexidade Dinâmica}} 
+
+{\large {\em Projeto de Pesquisa para Iniciação Científica}
+
+%\footnote{ Este pedido está inserido no Projeto
+%     \textsc{Aspectos Estruturais e Algorítmicos de Objetos
+%        Combinatórios} (Proc. FAPESP no. 96/04505--2), sob
+%      coordenação do professor Yoshiharu Kohayakawa.  }
+}
+
+\vspace{0.2cm}
+{\small 
+{\bf Orientadora:} Cristina Gomes Fernandes \\
+{\bf Aluno:} Daniel Angelo Esteves Lawand
+}
+
+\vspace{5mm} 
+
+{\small Este projeto de pesquisa acompanha a requisição de bolsa de \\ 
+  Iniciação Científica para o aluno Daniel Angelo Esteves Lawand.}
+
+\end{center}
+
+\section{Introdução}
+
+O objetivo deste projeto é o estudo e implementação de estruturas de dados e algoritmos 
+para problemas de conexidade em grafos num contexto onde o grafo pode sofrer 
+modificações~\cite{DemetrescuFI2004}.  
+
+O problema central será o de manter informações sobre as componentes conexas do grafo, 
+ou mais exatamente, o problema de responder eficientemente consultas do tipo: 
+\begin{itemize}
+\item Quantas componentes têm o grafo?
+\item Os vértices $u$ e $v$ estão numa mesma componente do grafo?
+\end{itemize}
+
+Num contexto estático, em que o grafo não sofre alterações, há um algoritmo linear que 
+determina as componentes conexas do grafo e responde de maneira ótima consultas como estas.
+
+No entanto, se o grafo em questão está sendo alterado, podendo ganhar ou perder arestas, 
+o problema torna-se mais desafiador.  Os tipos de modificações permitidas determinam 
+a dificuldade do problema.  Podemos considerar as três seguintes possibilidades: 
+\begin{itemize}
+\item {\bf conexidade incremental:} arestas podem ser acrescentadas ao grafo; 
+\item {\bf conexidade decremental:} arestas podem ser removidas do grafo;
+\item {\bf conexidade totalmente dinâmica:} arestas podem ser acrescidas ou removidas do grafo.
+\end{itemize}
+
+O problema de conexidade incremental é resolvido de maneira bastante eficiente por meio de 
+uma estrutura de dados conhecida como \emph{union-find}~\cite{Tarjan1975}, que provê resposta 
+às consultas em tempo aproximadamente constante. 
+
+O problema de conexidade decremental foi resolvido por Even e Shiloach~\cite{EvenS1981}.  
+O método usa uma tabela onde se mantem o identificador da componente de cada vértice do grafo.  
+A grande questão é como atualizar essa tabela quando da remoção de uma aresta. 
+
+Se o grafo em questão é uma floresta, ou seja, não tem circuitos, o problema é mais simples.  
+A ideia é que a remoção de uma aresta sempre quebrará uma componente em duas, e atualizaremos
+os identificadores do menor dos dois pedaços resultantes.  Ao remover por exemplo a aresta $uv$, 
+devemos determinar se o pedaço em que $u$ ficou é menor ou maior que o pedaço em que $v$ ficou.  
+Isso pode ser feito por exemplo usando-se duas buscas, uma a partir de $u$ e uma a partir de $v$, 
+que são executadas paralelamente (ou de maneira intercalada) e, ao chegarmos ao final de uma delas, 
+abortamos a segunda, pois determinamos já qual é o menor dos pedaços.  O tempo gasto desta maneira 
+será proporcional ao tamanho do menor dos pedaços, implicando que o tempo para a atualização, 
+amortizado pelo número de consultas é $\Oh(\lg n)$, onde $n$ é o número de vértices do grafo.
+
+Para grafos arbitrários, é necessário determinar se a aresta $uv$ removida quebra ou não uma 
+componente em duas.  A ideia de novo é executar dois processos em paralelo (ou intercaladamente): 
+um para determinar se $u$ e $v$ estão ainda na mesma componente após a remoção de $uv$, e o
+outro para decidir se uma componente foi quebrada em duas.  Esse segundo processo é semelhante
+ao que foi usado no caso em que o grafo é uma floresta.  Já o procedimento envolvido no 
+primeiro processo é um pouco mais sofisticado, e utiliza uma estrutura de dados construída 
+a partir de uma BFS do grafo original, que vai sendo atualizada a medida que o grafo vai 
+sofrendo remoções de arestas. 
+
+\newcommand{\FindRoot}{\mbox{\sc FindRoot}}
+\newcommand{\FindSet}{\mbox{\sc FindSet}}
+
+Para conexidade totalmente dinâmica em florestas, 
+podemos usar uma coleção das chamadas \emph{link-cut trees}~\cite{SleatorT1983} ou 
+das chamadas \emph{Euler tour trees}~\cite{HenzingerK1995} para representar a floresta.  
+Estas estruturas implementam uma rotina chamada $\FindRoot(x)$, 
+semelhante à rotina $\FindSet(x)$ do \emph{union-find}, que devolve 
+um representante da componente em que o vértice $x$ se encontra. 
+Com isso, podemos responder às consultas facilmente, pois dois vértices $x$ e $y$ 
+estão na mesma componente da floresta se e somente se $\FindRoot(x) = \FindRoot(y)$.
+O tempo amortizado de atualização e consulta é $\Oh(\lg n)$.
+
+Para o caso geral da conexidade totalmente dinâmica, podemos representar um grafo arbitrário  
+por uma floresta geradora maximal do grafo.  Se chamarmos uma tal floresta de $F$, podemos 
+usar por exemplo Euler tour trees para armazená-la.  Com isso, inserções e consultas podem 
+ser implementadas diretamente usando as operações correspondentes das Euler tour trees.  
+Por outro lado, as remoções são mais desafiadoras.  Em especial, se a aresta removida fizer
+parte da floresta $F$, isso pode requerer encontrar, de forma eficiente, uma outra aresta 
+do grafo para ser adicionada a~$F$.  Esta operação é implementada por meio de uma estrutura
+de dados mais complexa, que planejamos estudar também, como parte deste projeto~\cite{DemaineL2007}. 
+
+\section{Justificativa}
+
+O estudo de estruturas de dados e algoritmos mais sofisticados ou com análises
+mais complexas proporciona uma oportunidade de aprofundamento de conhecimentos 
+importantes adquiridos durante um bom curso de graduação em Ciência da Computação.
+
+Problemas dinâmicos em grafos dependem de estruturas de dados não triviais, para 
+serem resolvidos de maneira eficiente.  Várias destas estruturas não são abordadas 
+nos cursos obrigatórios de uma graduação em Ciência da Computação. 
+
+Redes como a internet são extremamente dinâmicas, e ampliaram dramaticamente o 
+interesse no estudo de problemas dinâmicos em grafos.  O estudo da conexidade 
+de tais redes é uma das primeiras etapas no entendimento da dinâmica da rede, 
+por isso eles têm um papel central nessa área. 
+
+O tema escolhido para este projeto serve como motivação para o estudo de tópicos 
+centrais de áreas importantes da Ciência da Computação, como projeto e análise 
+de algoritmos e estruturas de dados. 
+
+%%% síntese da bibliografia fundamental
+% O problema específico escolhido neste projeto é importante e rico, 
+% como demonstra o levantamento bibliográfico inicial.  
+% O problema é discutido em diversos livros~\cite{Gusfield97,SetubalM97,Vazirani01} e
+% em uma série de artigos, alguns clássicos~\cite{BlumJLTY94,Li90,Turner89} e
+% vários outros, alguns deles mais
+% recentes~\cite{ArmenS95,ArmenS95a,ArmenS98,Bongartz01,CzumajGPR97,KaplanS05,KosarajuPS94,Sweedyk00,TengY97,WeinardS06}.}
+
+%%% resumo do objetivo
+% Esta iniciação científica visa o estudo de algoritmos de aproximação e
+% resultados de complexidade para o SCS. Especial ênfase será dada aos
+% resultados referentes à conjectura sobre o algoritmo guloso para o
+% SCS.
+
+%%% o aluno, o BCC e o seu histórico escolar
+O Daniel é um aluno do terceiro ano do Bacharelado em Ciência da Computação (BCC) 
+do IME-USP. Embora suas notas no primeiro ano não sejam tão boas, levando-o a 
+uma média $7{,}0$ nas disciplinas que cursou, o Daniel não obteve nenhuma reprovação, 
+e melhorou significativamente seu aproveitamento no segundo ano, obtendo notas todas
+acima de $7{,}0$.  O seu interesse em fazer iniciação científica demonstra esse 
+amadurecimento e certamente vai consolidar ainda mais essa melhora do seu 
+aproveitamento no curso. 
+
+%%% ele já fez disciplinas importantes 
+As disciplinas do BCC que já foram concluídas pelo Daniel são suficientes 
+para levar adiante este projeto.  Dentre as disciplinas que ele cursou, 
+destacamos {\small\sc MAC0121 Estruturas de Dados e Algoritmos I} e 
+{\small\sc MAC0323 Estruturas de Dados e Algoritmos II}, que dão 
+uma base essencial para o desenvolvimento desse projeto. 
+
+\section{Objetivos}
+
+Neste projeto, o plano é estudar e implementar estruturas de dados e algoritmos
+usados no contexto de conexidade dinâmica de grafos.  Além do funcionamento destas 
+estruturas e algoritmos, serão estudados também suas análises de correção e seu 
+consumo assintótico de tempo.  Ou seja, serão abordados também conceitos e técnicas
+de análise de algoritmos. 
+
+%%% Estudos preliminares
+O Daniel fez um rápido estudo preliminar do problema da conexidade dinâmica em grafos, 
+que deve ser aprofundado durante os próximos meses. Ele também já implementou uma 
+primeira estrutura de dados, baseando-se no livro de Sedgewick e Wayne~\cite{SedgewickW2011},
+que será usada como base da implementação das chamadas \emph{splay trees}~\cite{SleatorT1985}. 
+Estas por sua vez são usadas na implementação das \emph{link-cut trees}. 
+No presente momento, o Daniel está estudando as splay trees, e deve começar a 
+implementá-las nas próximas semanas. 
+
+%%% Objetivos específicos
+O objetivo dessa iniciação científica é o aprendizado de várias estruturas de dados 
+que possuem aplicações não apenas em conexidade dinâmica, mas em diversas outras 
+area da Ciência da Computação.  Vale destacar que as estruturas de dados que serão 
+abordadas são não triviais e, sendo este um projeto de iniciação científica, é 
+possível que apenas parte do material mencionado seja completamente estudado e
+implementado. 
+
+%%% Objetivo secundário
+Como subproduto da iniciação científica, o Daniel deve também produzir
+um texto com tudo o que for estudado. 
+
+\section{Plano de trabalho e cronograma}
+
+\textcolor{red}{Precisamos ajustar isso para o Daniel.}
+
+O Rafael começou recentemente a trabalhar nesse projeto. Numa primeira
+fase, ele estudou os capítulos iniciais do livro de Carvalho et
+al.~\cite{CarvalhoCDGFFFMPSW01} sobre algoritmos de aproximação.
+Recentemente, ele iniciou o estudo dos capítulos~2 e~7 do livro de
+Vazirani~\cite{Vazirani01}, que tratam, entre outras coisas, de alguns
+algoritmos de aproximação clássicos para o SCS.
+
+%%% Estudos iniciais 
+O SCS\ é abordado em vários
+livros~\cite{Gusfield97,SetubalM97,Vazirani01}. A nossa intenção é
+inicialmente estudar os resultados sobre o SCS\ por estes livros,
+pois geralmente a apresentação nos livros é mais acessível e detalhada
+que nos artigos. Claro que eventualmente serão consultados os artigos
+originais que descrevem os algoritmos em
+questão~\cite{BlumJLTY94,Li90,Turner89}.
+
+Durante os primeiros meses o Rafael estudará dois algoritmos clássicos
+para o SCS~\cite{Gusfield97,SetubalM97,Vazirani01}, e continuará
+fazendo o levantamento bibliográfico sobre o assunto. A seguir, ele
+estudará a apresentação e análise original de um destes dois
+algoritmos, apresentada por Blum et al.~\cite{BlumJLTY94}. Essa
+apresentação original é interessante por tornar esse algoritmo mais
+parecido com o algoritmo guloso para o SCS. Neste artigo de Blum et
+al.~\cite{BlumJLTY94} aparece aliás a primeira análise do algoritmo
+guloso, que será o objeto de estudo na fase seguinte. Um artigo muito
+citado pelo de Blum et al.~\cite{BlumJLTY94} é o de
+Turner~\cite{Turner89}, que então também deverá ser estudado nesta
+fase.
+
+%%% Início da escrita do texto
+
+Ao final do estudo dos artigos de Blum et al.~\cite{BlumJLTY94} e de
+Turner~\cite{Turner89}, o Rafael começará a escrever um texto com a
+descrição de tudo que ele tiver estudado até então. Ao mesmo tempo,
+ele começará a estudar os próximos tópicos do projeto.
+
+%%% Estudos seguintes 
+Após esse estudo inicial, que terá coberto os algoritmos clássicos
+para o problema e a primeira análise do algoritmo guloso, iniciando
+uma segunda fase, o Rafael estudará um ou dois resultados de
+complexidade para o SCS~\cite{BlumJLTY94,GallantMS80,Vassilevska05}.
+Posteriormente, serão selecionados os tópicos específicos a serem
+estudados nessa segunda fase. Os tópicos possíveis são alguns dos
+algoritmos de aproximação mais recentes, apresentados apenas em
+artigos~\cite{ArmenS95a,ArmenS98,Bongartz01,CzumajGPR97,KosarajuPS94,Sweedyk00,TengY97},
+e algumas das análises aprimoradas do algoritmo
+guloso~\cite{ArmenS95,KaplanS05,WeinardS06}.
+
+%%% Muito material
+
+É bom destacar que mesmo esse levantamento bibliográfico inicial já
+mostra que há muito material sobre o assunto. Além disso, cada um dos
+tópicos a ser estudado é não-trivial, especialmente levando em conta o
+estágio acadêmico do Rafael. Assim sendo, podemos levar um tempo maior
+do que o previsto para cobrir devidamente o material pretendido.
+
+%%% Possível desvio de rota... 
+
+Também a ordem em que os assuntos da segunda fase do projeto serão
+estudados poderá ser alterada no decorrer do trabalho, se nos parecer
+conveniente. De qualquer modo, o espírito do projeto será mantido.
+
+%%% Ainda sobre o texto
+
+Tudo que for estudado pelo Rafael será descrito com detalhes em um
+texto, que ele produzirá durante esta iniciação científica a medida
+que for estudando os diversos tópicos. 
+
+%%% Cronograma
+
+O cronograma estipulado para 12 meses é o seguinte. 
+
+% {\small 
+\begin{center}
+\noindent
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
+Ativ/Mês & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\ \hline
+1 & $\surd$ &         & & & & & & & & & & \\
+2 & $\surd$ & $\surd$ & & & & & & & & & & \\
+3 &         &         & $\surd$ & & & & & & & & & \\
+4 &         &         & $\surd$ & $\surd$ & & & & & & & & \\
+5 &         &         &         & $\surd$ & & & & & & & & \\
+6 &         &         &         & $\surd$ & $\surd$ & $\surd$ & $\surd$ & & & & & \\
+7 &         &         &         &         &         & $\surd$ & & & & & & \\
+8 &         &         &         &         &         &         &         & $\surd$ & $\surd$ & $\surd$ & $\surd$ & \\
+9 &         &         &         &         & $\surd$ & $\surd$ & $\surd$ & $\surd$ & $\surd$ & $\surd$ & $\surd$ & $\surd$ \\
+10 &         &         &         &         &         & & & & & & & $\surd$ \\ \hline
+\end{tabular}
+\end{center}
+
+\noindent 
+{\bf Legenda:}
+
+\begin{enumerate}
+\item[1.] Complementação do estudo de algoritmos de aproximação. \vspace{-2mm}
+\item[2.] Estudo dos algoritmos clássicos para o SCS. \vspace{-2mm}
+\item[3.] Estudo da primeira análise do algoritmo guloso. \vspace{-2mm}
+\item[4.] Início da escrita do texto, referente a 1, 2 e 3. \vspace{-2mm}
+\item[5.] Estudo de alguns resultados de complexidade para o SCS.\vspace{-2mm}
+\item[6.] Estudo de alguns algoritmos mais recentes para o SCS. \vspace{-2mm}
+\item[7.] Preparação do relatório intermediário. \vspace{-2mm}
+\item[8.] Estudo das análises mais recentes do algoritmo guloso para o SCS. \vspace{-2mm}
+\item[9.] Continuação da escrita do texto. \vspace{-2mm}
+\item[10.] Preparação do relatório final.
+\end{enumerate}
+
+\section{Material e métodos}
+
+\textcolor{red}{
+Como já comentamos, há muito material sobre o SCS na literatura.
+Primeiramente, o SCS é abordado em vários
+livros~\cite{Gusfield97,SetubalM97,Vazirani01}, que tratam dos
+resultados mais clássicos, dos artigos de Blum et al., de Li, e de
+Turner~\cite{BlumJLTY94,Li90,Turner89}.
+}
+
+\textcolor{red}{
+Gallant et al.~\cite{GallantMS80} mostraram que o SCS é NP-difícil,
+mas existem alguns outros resultados de complexidade, sob o ponto de
+vista de aproximação (resultados de inaproximabilidade), nos artigos
+de Blum et al.~e de Vassilevska~\cite{BlumJLTY94,Vassilevska05}.
+}
+
+\textcolor{red}{
+Vários algoritmos de aproximação para o SCS podem ser encontrados na
+literatura~\cite{ArmenS95a,ArmenS98,Bongartz01,CzumajGPR97,KosarajuPS94,Li90,Sweedyk00}.
+Também há uma série de artigos apresentando análises aprimoradas do
+algoritmo guloso~\cite{ArmenS95,KaplanS05,WeinardS06}.
+}
+
+O método que usaremos para conduzir essa iniciação científica é tradicional. 
+O aluno estudará cuidadosamente os diversos resultados, e irá implementando 
+parte do que for estudado, e teremos reuniões a cada duas semanas para discutir 
+os assuntos estudados e as implementações.  Ao mesmo tempo que estuda e implementa
+parte dos tópicos, o aluno escreverá um texto, o que possibilitará uma melhor 
+avaliação de quão bem o material estudado está sendo absorvido.
+
+\section{Forma e análise dos resultados}
+
+Durante todo o período de estudo, além das implementações, o aluno estará preparando 
+um texto, que, ao final do trabalho, conterá tudo que foi estudado na iniciação científica. 
+Este é o principal objeto que pode ser usado na análise do trabalho que estará sendo desenvolvido.
+Fora isso, evidentemente esperamos que o aluno mantenha o bom desempenho (ou até melhore) no BCC. 
+
+\bibliographystyle{plain}
+\bibliography{projeto}
+
+\end{document}

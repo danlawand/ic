@@ -1,0 +1,8 @@
+
+Inserção: Chave 1 -- Valor 1
+Tamanho: 1
+
+1
+Tamanho: 1
+
+1

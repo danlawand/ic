@@ -1,0 +1,108 @@
+
+Inserção: Chave 10 -- Valor 10
+Tamanho: 1
+
+10
+
+Inserção: Chave 1 -- Valor 1
+Tamanho: 2
+
+          10
+
+1
+
+Busca: Chave 6 -- Valor -2147483648
+Tamanho: 2
+
+10
+
+          1
+
+Inserção: Chave 4 -- Valor 4
+Tamanho: 3
+
+          10
+
+4
+
+          1
+
+Inserção: Chave 9 -- Valor 9
+Tamanho: 4
+
+          10
+
+9
+
+          4
+
+                    1
+
+Busca: Chave 9 -- Valor 9
+Tamanho: 4
+
+          10
+
+9
+
+          4
+
+                    1
+
+Inserção: Chave 6 -- Valor 6
+Tamanho: 5
+
+                    10
+
+          9
+
+6
+
+          4
+
+                    1
+
+Inserção: Chave 8 -- Valor 8
+Tamanho: 6
+
+                    10
+
+          9
+
+8
+
+          6
+
+                    4
+
+                              1
+
+Inserção: Chave 10 -- Valor 10
+Tamanho: 6
+
+10
+
+          9
+
+                    8
+
+                              6
+
+                                        4
+
+                                                  1
+
+Busca: Chave 7 -- Valor -2147483648
+Tamanho: 6
+
+                    10
+
+          9
+
+                    8
+
+6
+
+          4
+
+                    1

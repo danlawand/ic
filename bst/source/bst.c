@@ -55,7 +55,7 @@ static Node put(Node x, Key key, Value val) {
 
 Key floorTreeBST(Key key) {
 	Node x = floorTree(root, key);
-	if (x == NULL) return NULL;
+	if (x == NULL) return keyNull();
 	return x->key;
 }
 
@@ -71,7 +71,7 @@ static Node floorTree(Node x, Key key) {
 
 Key ceilingBST(Key key) {
 	Node x = ceiling(root, key);
-	if (x == NULL) return NULL;
+	if (x == NULL) return keyNull();
 	return x->key;
 }
 
@@ -86,7 +86,7 @@ static Node ceiling(Node x, Key key) {
 }
 
 Key minBST() {
-	if (root == NULL) return NULL;
+	if (root == NULL) return keyNull();
 	return min(root)->key;
 }
 
@@ -144,3 +144,4 @@ static void printBST(Node x, int i) {
 		printBST(x->right, i+1);
 	}
 }
+

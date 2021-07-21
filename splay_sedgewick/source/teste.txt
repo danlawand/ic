@@ -1,0 +1,209 @@
+
+Inserção: Chave 5 -- Valor 5
+Tamanho: 1
+
+5
+
+Inserção: Chave 2 -- Valor 2
+Tamanho: 2
+
+          5
+
+2
+
+Inserção: Chave 1 -- Valor 1
+Tamanho: 3
+
+                    5
+
+          2
+
+1
+
+Inserção: Chave 4 -- Valor 4
+Tamanho: 4
+
+          5
+
+4
+
+          2
+
+                    1
+
+Inserção: Chave 0 -- Valor 0
+Tamanho: 5
+
+                                        5
+
+                              4
+
+                    2
+
+          1
+
+0
+
+Inserção: Chave 3 -- Valor 3
+Tamanho: 6
+
+                    5
+
+          4
+
+3
+
+                    2
+
+          1
+
+                    0
+
+Remoção: Chave 2
+Tamanho: 5
+
+                              5
+
+                    4
+
+          3
+
+1
+
+          0
+
+Remoção: Chave 5
+Tamanho: 4
+
+4
+
+          3
+
+                    1
+
+                              0
+
+Inserção: Chave 7 -- Valor 7
+Tamanho: 5
+
+7
+
+          4
+
+                    3
+
+                              1
+
+                                        0
+
+Remoção: Chave 1
+Tamanho: 4
+
+                    7
+
+          4
+
+                    3
+
+0
+
+Inserção: Chave 2 -- Valor 2
+Tamanho: 5
+
+                              7
+
+                    4
+
+          3
+
+2
+
+          0
+
+Inserção: Chave 4 -- Valor 4
+Tamanho: 5
+
+          7
+
+4
+
+          3
+
+                    2
+
+                              0
+
+Inserção: Chave 10 -- Valor 10
+Tamanho: 6
+
+10
+
+          7
+
+                    4
+
+                              3
+
+                                        2
+
+                                                  0
+
+Inserção: Chave 1 -- Valor 1
+Tamanho: 7
+
+                    10
+
+          7
+
+                              4
+
+                    3
+
+                              2
+
+1
+
+          0
+
+Remoção: Chave 7
+Tamanho: 6
+
+          10
+
+4
+
+          3
+
+                              2
+
+                    1
+
+                              0
+
+Busca: Chave 3 -- Valor 3
+Tamanho: 6
+
+                    10
+
+          4
+
+3
+
+                    2
+
+          1
+
+                    0
+Tamanho: 6
+
+                    10
+
+          4
+
+3
+
+                    2
+
+          1
+
+                    0

@@ -15,6 +15,11 @@ int main(int argc, char * argv[]) {
 	char buffer[TAMANHO_MAX];
     char * copia;
 
+    if (argc < 1) {
+		printf("It needs the file's name.\n");
+		exit(EXIT_FAILURE);
+    }
+
 	for (int i = 0; i < tam; i++) {
 		nome[i] = argv[1][i];
 	}  

@@ -4,14 +4,14 @@
       int element;
     };
 
-This pic illustrates what the below routine does on canvas..
+/*This pic illustrates what the below routine does on canvas..
 ascii tree
 
 Here is the printing routine..
 
     b5855d39a6b8a2735ddcaa04a404c125001 
 
-Auxiliary routines..
+Auxiliary routines..*/
 
     //This function prints the given level of the given tree, assuming
     //that the node has the given x cordinate.

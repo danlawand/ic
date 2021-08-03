@@ -1,4 +1,5 @@
 #include "splay.h"
+#include "printTree.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,8 +21,6 @@ static Node  join(Node, Node);
 static Node* split(Node);
 static void  delete(Node);
 static void  printSPLAY(Node, int);
-static void  print2DUtil(Node, int, FILE*);
-
 /*
 	Estou pensando nas link-cut trees
 	* Como saber onde eu adiciono um Node em uma splay tree
@@ -33,14 +32,14 @@ static void  print2DUtil(Node, int, FILE*);
 */
 
 
-int initSplay() {
-	int splay_id;
-	root = NULL;
-	splay_id = number_splay_trees;
-	number_splay_trees++;
+// int initSplay() {
+// 	int splay_id;
+// 	root = NULL;
+// 	splay_id = number_splay_trees;
+// 	number_splay_trees++;
 
-	return splay_id;
-}
+// 	return splay_id;
+// }
 
 int sizeSPLAY() {
 	return size(root);
@@ -63,6 +62,7 @@ void putSPLAY(Key key, Value val) {
 
 void deleteSPLAY(Key key) {
 	Node x = getNode(root, key);
+	if (x == NULL) return;
 	delete(x);
 	printf("Remocao completa da chave: %d\n", key);
 }
@@ -114,7 +114,7 @@ void splay (Node x) {
 }
 
 int isRoot(Node x) {
-	if (x-parent == NULL) return 1;
+	if (x->parent == NULL) return 1;
 	return 0;
 }
 /* ALGORITHMS OF https://www.cs.cmu.edu/~sleator/papers/dynamic-trees.pdf
@@ -132,7 +132,7 @@ Node root(Node v) {
 	return w;
 }
 
-
+// 
 // Return  the  cost  of  the  edge  (v,parenf(v)). This operation  assumes that  v  is not  a  tree  root
 int cost(Node v, Node p) {
 	if (p == NULL) return 0;
@@ -314,25 +314,24 @@ static Node* split(Node x) {
 
 	return split_roots;
 }
-
+// Pré-condição é que x != NULL
 static void delete(Node x) {
 
 	Node* trees;
 	trees = split(x);
-	if(trees != NULL) {
-		if (trees[0] != NULL) {
-			//x->left->parent = x
-			if (trees[0]->left != NULL) trees[0]->left->parent = NULL;
-		}
-		root = join(trees[0]->left, trees[1]);
-		trees[0] = NULL;
-		trees[1] = NULL;
-	}
+
+	//x->left->parent = x
+	if (trees[0]->left != NULL) trees[0]->left->parent = NULL;
+
+	root = join(trees[0]->left, trees[1]);
+	trees[0] = NULL;
+	trees[1] = NULL;
 }
 
 /************************   PRINT FUNCTIONS ************************/
 
-void printTree() {
+void printTree(FILE *pFile) {
+	if (pFile != NULL) print2D(root, pFile);
 	printSPLAY(root, 1);
 }
 
@@ -352,36 +351,4 @@ static void printSPLAY(Node x, int i) {
 		printf("%*d:%d\n", 2*i, x->val, x->N);
 		printSPLAY(x->right, i+1);
 	}
-}
-
-// Function to print binary tree in 2D
-// It does reverse inorder traversal
-static void print2DUtil(Node x, int space, FILE *pFile)
-{
-	// Base case
-	if (x == NULL)
-		return;
-
-	// Increase distance between levels
-	space += COUNT;
-
-	// Process right child first
-	print2DUtil(x->right, space, pFile);
-
-	// Print current node after space
-	// count
-	fprintf(pFile,"\n");
-	for (int i = COUNT; i < space; i++)
-		fprintf(pFile," ");
-	fprintf(pFile,"%d\n", x->val);
-
-	// Process left child
-	print2DUtil(x->left, space, pFile);
-}
-
-// Wrapper over print2DUtil()
-void print2D(FILE *pFile)
-{
-	// Pass initial space count as 0
-	print2DUtil(root, 0, pFile);
 }

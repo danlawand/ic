@@ -11,7 +11,7 @@ int main(int argc, char * argv[]) {
 
 	int chave, valor;
 	char c = '0';
-	initSplay();
+	// initSplay();
 	while(c != 's') {
 		printf("(i)nserir (r)emover (g)et ou (s)air?\n");
 		scanf(" %c",&c);
@@ -36,8 +36,7 @@ int main(int argc, char * argv[]) {
 			printf("%d\n", sizeSPLAY());
 		}
 		fprintf(pFile, "Tamanho: %d\n", sizeSPLAY());
-		print2D(pFile);
-		printTree();
+		printTree(pFile);
 		printRoot();
 	}
 	printf("Tamanho: %d\n", sizeSPLAY());

@@ -14,8 +14,11 @@ RM = rm -rf
 
 OBJS1 		= testaAutoma.o splay.o node.o item.o
 OBJS2 		= testaIterativo.o splay.o node.o item.o
+EXEC 		= testaAutoma testaIterativo
 
 # ----------------------------------------------------------
+all: $(EXEC)
+
 testaAutoma: $(OBJS1)
 	$(CC) $(OBJS1) -o testaAutoma -lm
 
@@ -38,5 +41,5 @@ item.o: item.c item.h
 	$(CC) $(CFLAGS) -c item.c
 
 clean:
-	$(RM) *.o *~ testaAutoma testaIterativo
+	$(RM) *.o *~ $(EXEC)
 

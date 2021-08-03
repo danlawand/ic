@@ -19,14 +19,15 @@ int sizeSPLAY();
 Key maxSPLAY();
 int isRoot(Node);
 /**** PRINT ****/
-void printTree();
+void printTree(FILE*);
 void printRoot();
-void print2D(FILE*);
 void printPai();
 #endif
 
 
+// maketree(Key)
+
+// MakeTree
 // FindRoot
-// Cut
-// Link
-// path_aggregate	
+// Cut  --> | rotinas auxiliares Access e Switch-Preferred-Child
+// Link --> |

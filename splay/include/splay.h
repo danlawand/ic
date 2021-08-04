@@ -18,17 +18,7 @@ void deleteSPLAY(Key);
 int sizeSPLAY();
 Key maxSPLAY();
 int isRoot(Node);
-/**** PRINT ****/
 void printTree(FILE*);
 void printRoot();
 void printPai();
 #endif
-
-/*
-// maketree(Key)
-
-// MakeTree
-// FindRoot
-// Cut  --> | rotinas auxiliares Access e Switch-Preferred-Child
-// Link --> |
-*/

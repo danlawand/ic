@@ -3,12 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define  COUNT	 						10
-#define  INITIAL_NUM_SPLAY_TREES		 0
-
-static Node  root; /*root of Splay Tree*/
+static Node  root; 				/*root of Splay Tree*/
 static Node  split_roots[2];
-static int   number_splay_trees = INITIAL_NUM_SPLAY_TREES;
 
 static int   size(Node);
 static void  putIterativo(Key, Value);
@@ -21,25 +17,6 @@ static Node  join(Node, Node);
 static Node* split(Node);
 static void  delete(Node);
 static void  printSPLAY(Node, int);
-/*
-	Estou pensando nas link-cut trees
-	* Como saber onde eu adiciono um Node em uma splay tree
-	sem indicar qual root?
-	
-	* Como armazenar as diferentes splay-trees?
-	  R: linked-list of roots of splay trees?
-
-*/
-
-
-// int initSplay() {
-// 	int splay_id;
-// 	root = NULL;
-// 	splay_id = number_splay_trees;
-// 	number_splay_trees++;
-
-// 	return splay_id;
-// }
 
 int sizeSPLAY() {
 	return size(root);
@@ -117,36 +94,9 @@ int isRoot(Node x) {
 	if (x->parent == NULL) return 1;
 	return 0;
 }
-/* ALGORITHMS OF https://www.cs.cmu.edu/~sleator/papers/dynamic-trees.pdf
 
-Node parent(Node v) {
-	return v->parent;
-}
 
-Node root(Node v) {
-	Node w = v;
-	while(v != NULL) {
-		w = v;
-		v = v->parent;
-	}
-	return w;
-}
-
-// 
-// Return  the  cost  of  the  edge  (v,parenf(v)). This operation  assumes that  v  is not  a  tree  root
-int cost(Node v, Node p) {
-	if (p == NULL) return 0;
-	return p->val - v->val;
-}
-
-// Return the vertex w closest to root(v)  such  that  the  edge (w,parent(w))  
-// has  minimum  cost  among  edges  on the  tree  path  from  v  to root(v). 
-// This  operation  assumes that v  is  not  a  tree  root. 
-Node mincost(Node v) {
-	if 
-
-}
-*/
+/************************   AUXILIARY FUNCTIONS ************************/
 static int size(Node x) {
 	if (x == NULL) return 0;
 	return x->N;
@@ -314,6 +264,7 @@ static Node* split(Node x) {
 
 	return split_roots;
 }
+
 // Pré-condição é que x != NULL
 static void delete(Node x) {
 
@@ -343,11 +294,8 @@ void printRoot() {
 
 
 static void printSPLAY(Node x, int i) {
-	int pai;
 	if (x != NULL) {
 		printSPLAY(x->left, i+1);
-		if (x->parent == NULL) pai = 0;
-		else pai = x->parent->key;
 		printf("%*d:%d\n", 2*i, x->val, x->N);
 		printSPLAY(x->right, i+1);
 	}

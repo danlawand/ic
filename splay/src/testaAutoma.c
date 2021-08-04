@@ -40,7 +40,7 @@ int main(int argc, char * argv[]) {
     	printf("%s\n",buffer);
     	copia = buffer;
     }
-
+/*
 	// while((ch = fgetc(fp)) != EOF) {
 	// 	if (ch >= 48 && ch <= 57) {
 
@@ -88,4 +88,5 @@ int main(int argc, char * argv[]) {
 	// printf("%d\n", sizeSPLAY());
 	// fclose (arquivo_saida);
 	fclose (arquivo_entrada);
+*/
 }

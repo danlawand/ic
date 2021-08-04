@@ -4,14 +4,13 @@
 
 int main(int argc, char * argv[]) {
    FILE * pFile;
-   int n;
    Value val;
-   pFile = fopen ("teste.txt","w");
+   pFile = fopen ("result_iterativo.txt","w");
 
 
 	int chave, valor;
 	char c = '0';
-	// initSplay();
+
 	while(c != 's') {
 		printf("(i)nserir (r)emover (g)et ou (s)air?\n");
 		scanf(" %c",&c);

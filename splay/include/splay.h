@@ -3,13 +3,6 @@
 #include "node.h"
 #include <stdio.h>
 
-typedef struct splayRoots *SplayRoots;
-struct splayRoots {
-	SplayRoots next;
-	Node root;
-};
-
-
 int initSplay();
 void splay(Node);
 Value getSPLAY(Key);

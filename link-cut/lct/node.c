@@ -4,13 +4,14 @@
 
 static void *mallocSafe(size_t);
 
-Node newNode(Key key, Value val, Node left, Node right, Node parent, int N) {
+Node newNode(Key key, Value val, Node left, Node right, Node parent, Node pathParent, int N) {
 	Node p = mallocSafe(sizeof(*p));
 	p->key = key;
 	p->val = val;
 	p->left = left;
 	p->right = right;
 	p->parent = parent;
+	p->pathParent = pathParent;
 	p->N = N;
 	return p;
 }

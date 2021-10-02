@@ -3,13 +3,6 @@
 #include "node.h"
 #include <stdio.h>
 
-typedef struct splayRoots *SplayRoots;
-struct splayRoots {
-	SplayRoots next;
-	Node root;
-};
-
-
 int initSplay();
 void splay(Node);
 Value getSPLAY(Key);
@@ -22,12 +15,3 @@ void printTree(FILE*);
 void printRoot();
 void printPai();
 #endif
-
-/*
-// maketree(Key)
-
-// MakeTree
-// FindRoot
-// Cut  --> | rotinas auxiliares Access e Switch-Preferred-Child
-// Link --> |
-*/

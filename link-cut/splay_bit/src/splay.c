@@ -3,12 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define  COUNT	 						10
-#define  INITIAL_NUM_SPLAY_TREES		 0
-
-static Node  root; /*root of Splay Tree*/
+// children[0] == right
+// children[1] == left
+static Node  root; 				/*root of Splay Tree*/
 static Node  split_roots[2];
-static int   number_splay_trees = INITIAL_NUM_SPLAY_TREES;
 
 static int   size(Node);
 static void  putIterativo(Key, Value);
@@ -21,26 +19,6 @@ static Node  join(Node, Node);
 static Node* split(Node);
 static void  delete(Node);
 static void  printSPLAY(Node, int);
-
-/*
-	Estou pensando nas link-cut trees
-	* Como saber onde eu adiciono um Node em uma splay tree
-	sem indicar qual root?
-	
-	* Como armazenar as diferentes splay-trees?
-	  R: linked-list of roots of splay trees?
-
-*/
-
-
-// int initSplay() {
-// 	int splay_id;
-// 	root = NULL;
-// 	splay_id = number_splay_trees;
-// 	number_splay_trees++;
-
-// 	return splay_id;
-// }
 
 int sizeSPLAY() {
 	return size(root);
@@ -75,7 +53,7 @@ void splay (Node x) {
 		if (x->parent->parent == NULL) {
 
 			//If it's the left child
-			if (x == x->parent->left) {
+			if (x == x->parent->children[1]) {
 				// zig rotation
 				rotateRight(x->parent);
 			} 
@@ -86,19 +64,19 @@ void splay (Node x) {
 			}
 		}
 		//If It's the left child and it's parent is the left child
-		else if (x == x->parent->left && x->parent == x->parent->parent->left) {
+		else if (x == x->parent->children[1] && x->parent == x->parent->parent->children[1]) {
 			// zig-zig rotation
 			rotateRight(x->parent->parent);
 			rotateRight(x->parent);
 		}
 		//If It's the right child and it's parent is the right child
-		else if (x == x->parent->right && x->parent == x->parent->parent->right) {
+		else if (x == x->parent->children[0] && x->parent == x->parent->parent->children[0]) {
 			// zag-zag rotation
 			rotateLeft(x->parent->parent);
 			rotateLeft(x->parent);
 		}
 		//If It's the right child and it's parent is the left child
-		else if (x == x->parent->right && x->parent == x->parent->parent->left) {
+		else if (x == x->parent->children[0] && x->parent == x->parent->parent->children[1]) {
 			// zig-zag rotation
 			rotateLeft(x->parent);
 			rotateRight(x->parent);
@@ -118,39 +96,9 @@ int isRoot(Node x) {
 	if (x->parent == NULL) return 1;
 	return 0;
 }
-/* ALGORITHMS OF https://www.cs.cmu.edu/~sleator/papers/dynamic-trees.pdf
 
-Node parent(Node v) {
-	return v->parent;
-}
-
-Node root(Node v) {
-	Node w = v;
-	while(v != NULL) {
-		w = v;
-		v = v->parent;
-	}
-	return w;
-}
-
-// 
-// Return  the  cost  of  the  edge  (v,parenf(v)). This operation  assumes that  v  is not  a  tree  root
-int cost(Node v, Node p) {
-	if (p == NULL) return 0;
-	return p->val - v->val;
-}
-
-// Return the vertex w closest to root(v)  such  that  the  edge (w,parent(w))  
-// has  minimum  cost  among  edges  on the  tree  path  from  v  to root(v). 
-// This  operation  assumes that v  is  not  a  tree  root. 
-Node mincost(Node v) {
-	if 
-
-}
-*/
 
 /************************   AUXILIARY FUNCTIONS ************************/
-
 static int size(Node x) {
 	if (x == NULL) return 0;
 	return x->N;
@@ -159,22 +107,22 @@ static int size(Node x) {
 static Value getValue(Node x, Key key) {
 	if (x == NULL) return valueNull();
 	int cmp = compareKeys(key, x->key);
-	if (cmp < 0) return getValue(x->left, key);
-	else if (cmp > 0) return getValue(x->right, key);
+	if (cmp < 0) return getValue(x->children[1], key);
+	else if (cmp > 0) return getValue(x->children[0], key);
 	else return x->val;
 }
 
 static Node getNode(Node x, Key key) {
 	if (x == NULL) return NULL;
 	int cmp = compareKeys(key, x->key);
-	if (cmp < 0) return getNode(x->left, key);
-	else if (cmp > 0) return getNode(x->right, key);
+	if (cmp < 0) return getNode(x->children[1], key);
+	else if (cmp > 0) return getNode(x->children[0], key);
 	else return x;
 }
 
 static void putIterativo(Key key, Value val) {
 	if (root == NULL) {
-		root = newNode(key, val, NULL, NULL, NULL, 1);
+		root = newNode(key, val, NULL, NULL, NULL, NULL, 0, 1);
 		return;
 	}
 	Node v = root;
@@ -183,9 +131,9 @@ static void putIterativo(Key key, Value val) {
 	esq = 0;
 	while(1) {
 		if (v == NULL) {
-			v = newNode(key, val, NULL, NULL, q, 1);
-			if (esq) q->left = v;
-			else q->right = v;
+			v = newNode(key, val, NULL, NULL, q, NULL, 0, 1);
+			if (esq) q->children[1] = v;
+			else q->children[0] = v;
 
 			while(q != NULL) {
 				q->N = q->N + 1;
@@ -198,11 +146,11 @@ static void putIterativo(Key key, Value val) {
 			if (cmp < 0) {
 				esq = 1;
 				q = v;
-				v = v->left;
+				v = v->children[1];
 			} else if (cmp > 0) {
 				esq = 0;
 				q = v;
-				v = v->right;
+				v = v->children[0];
 			} else {
 				v->val = val;
 				break;
@@ -224,28 +172,28 @@ static void rotateRight (Node h) {
 
 	Node hParent = h->parent;
 
-	Node x = h->left;
-	h->left = x->right;
+	Node x = h->children[1];
+	h->children[1] = x->children[0];
 
 	// A subarvore que era filha, agora é filha de h,
 	// mas ela precisa saber quem é seu pai agr
-	if (h->left != NULL) h->left->parent = h;
+	if (h->children[1] != NULL) h->children[1]->parent = h;
 
-	x->right = h;
+	x->children[0] = h;
 
 	x->parent = h->parent;
 	h->parent = x;
 
 	if (hParent != NULL) {
-		if (hParent->right == h) {
-			hParent->right = x;
+		if (hParent->children[0] == h) {
+			hParent->children[0] = x;
 		} else {
-			hParent->left = x;
+			hParent->children[1] = x;
 		}
 	}
 
 	x->N = h->N; 
-	h->N = size(h->left) + size(h->right) + 1;
+	h->N = size(h->children[1]) + size(h->children[0]) + 1;
 }
 
 static void rotateLeft (Node h) {
@@ -254,28 +202,28 @@ static void rotateLeft (Node h) {
 	// and h become left child of x 
 	Node hParent = h->parent;
 
-	Node x = h->right;
-	h->right = x->left;
+	Node x = h->children[0];
+	h->children[0] = x->children[1];
 
 	// A subarvore que era filha, agora é filha de h,
 	// mas ela precisa saber quem é seu pai agr
-	if (h->right != NULL) h->right->parent = h;
+	if (h->children[0] != NULL) h->children[0]->parent = h;
 
-	x->left = h;
+	x->children[1] = h;
 
 	x->parent = h->parent;
 	h->parent = x;
 
 	if (hParent != NULL) {
-		if (hParent->right == h) {
-			hParent->right = x;
+		if (hParent->children[0] == h) {
+			hParent->children[0] = x;
 		} else {
-			hParent->left = x;
+			hParent->children[1] = x;
 		}
 	}
 
 	x->N = h->N; 
-	h->N = size(h->left) + size(h->right) + 1;
+	h->N = size(h->children[1]) + size(h->children[0]) + 1;
 }
 
 
@@ -287,29 +235,29 @@ static Node join(Node S, Node T) {
 	Node x = maximum(S);
 	splay(x);
 
-	x->right = T;
+	x->children[0] = T;
 	T->parent = x;
 
 	//x is the root of the joining tree
-	x->N = size(x->left) + size(x->right) + 1;
+	x->N = size(x->children[1]) + size(x->children[0]) + 1;
 	return x;
 }
 
 static Node maximum(Node x) {
-	if (x->right == NULL) return x;
-	return maximum(x->right);
+	if (x->children[0] == NULL) return x;
+	return maximum(x->children[0]);
 }
 
 static Node* split(Node x) {
 	Node S, T;
 	splay(x);
-	T = x->right;
-	if (x->right != NULL) T->parent = NULL;
+	T = x->children[0];
+	if (x->children[0] != NULL) T->parent = NULL;
 	
 
 	S = x;
-	S->right = NULL;
-	S->N = size(S->left) + 1;
+	S->children[0] = NULL;
+	S->N = size(S->children[1]) + 1;
 
 	x = NULL;
 
@@ -326,9 +274,9 @@ static void delete(Node x) {
 	trees = split(x);
 
 	//x->left->parent = x
-	if (trees[0]->left != NULL) trees[0]->left->parent = NULL;
+	if (trees[0]->children[1] != NULL) trees[0]->children[1]->parent = NULL;
 
-	root = join(trees[0]->left, trees[1]);
+	root = join(trees[0]->children[1], trees[1]);
 	trees[0] = NULL;
 	trees[1] = NULL;
 }
@@ -349,10 +297,8 @@ void printRoot() {
 
 static void printSPLAY(Node x, int i) {
 	if (x != NULL) {
-		printSPLAY(x->left, i+1);
-		if (x->parent == NULL) pai = 0;
-		else pai = x->parent->key;
+		printSPLAY(x->children[1], i+1);
 		printf("%*d:%d\n", 2*i, x->val, x->N);
-		printSPLAY(x->right, i+1);
+		printSPLAY(x->children[0], i+1);
 	}
 }

@@ -7,12 +7,15 @@ typedef struct node *Node;
 struct node {
 	Key key;	/*key*/
 	Value val;	/*associated value*/
-	Node left;	/*link to subtrees*/
-	Node right;
+	Node children[2]; /*link to subtrees*/
+	// Node left;	
+	// Node right;
 	Node parent;	
+	Node pathParent;
+	int bit;
 	int N;		/* # nodes in subtree rooted here*/
 };
 
-Node newNode(Key, Value, Node, Node, Node, int);
+Node newNode(Key, Value, Node, Node, Node, Node, int, int);
 
 #endif

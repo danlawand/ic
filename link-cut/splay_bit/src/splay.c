@@ -46,6 +46,13 @@ void deleteSPLAY(Key key) {
 	printf("Remocao completa da chave: %d\n", key);
 }
 
+// int childIndexNode(int bit_parent, int bit_child, int index_child) {
+// 	if (bit_parent != bit_child) {
+		
+// 	}
+// 	return alguma outra coisa
+// }
+
 void splay (Node x) {
 	while (x->parent != NULL) {
 		
@@ -122,7 +129,7 @@ static Node getNode(Node x, Key key) {
 
 static void putIterativo(Key key, Value val) {
 	if (root == NULL) {
-		root = newNode(key, val, NULL, NULL, NULL, NULL, 0, 1);
+		root = newNode(key, val, NULL, NULL, NULL, NULL, 1, 1);
 		return;
 	}
 	Node v = root;
@@ -131,7 +138,7 @@ static void putIterativo(Key key, Value val) {
 	esq = 0;
 	while(1) {
 		if (v == NULL) {
-			v = newNode(key, val, NULL, NULL, q, NULL, 0, 1);
+			v = newNode(key, val, NULL, NULL, q, NULL, 1, 1);
 			if (esq) q->children[1] = v;
 			else q->children[0] = v;
 

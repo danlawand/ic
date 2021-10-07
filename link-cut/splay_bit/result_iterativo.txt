@@ -1,539 +1,248 @@
 
-Inserção: Chave 1 -- Valor 1
-Tamanho: 1
-
-1
-
-Inserção: Chave 2 -- Valor 2
-Tamanho: 2
-
-          1
-
-2
-
 Inserção: Chave 3 -- Valor 3
-Tamanho: 3
-
-                    1
-
-          2
+Tamanho: 1
 
 3
 
-Inserção: Chave 5 -- Valor 5
-Tamanho: 4
+Inserção: Chave 4 -- Valor 4
+Tamanho: 2
 
-                              1
-
-                    2
+4
 
           3
 
+Inserção: Chave 5 -- Valor 5
+Tamanho: 3
+
 5
-
-Remoção: Chave 3
-Tamanho: 3
-
-          1
-
-2
-
-          5
-Tamanho: 3
-
-          1
-
-2
-
-          5
-
-Inserção: Chave 22 -- Valor 22
-Tamanho: 4
-
-                              1
-
-                    2
-
-          5
-
-22
-
-Inserção: Chave 15 -- Valor 15
-Tamanho: 5
-
-                              1
-
-                    2
-
-          5
-
-15
-
-          22
-
-Inserção: Chave 17 -- Valor 17
-Tamanho: 6
-
-                                        1
-
-                              2
-
-                    5
-
-          15
-
-17
-
-          22
-
-Inserção: Chave 8 -- Valor 8
-Tamanho: 7
-
-                              1
-
-                    2
-
-          5
-
-8
-
-                    15
-
-          17
-
-                    22
-
-Inserção: Chave 3 -- Valor 3
-Tamanho: 8
-
-                    1
-
-          2
-
-3
-
-                    5
-
-          8
-
-                              15
-
-                    17
-
-                              22
-
-Inserção: Chave 12 -- Valor 12
-Tamanho: 9
-
-                                        1
-
-                              2
-
-                    3
-
-                              5
-
-          8
-
-12
-
-          15
-
-                    17
-
-                              22
-
-Inserção: Chave 0 -- Valor 0
-Tamanho: 10
-
-0
-
-                              1
-
-                                        2
-
-                    3
-
-                                        5
-
-                              8
-
-          12
-
-                    15
-
-                              17
-
-                                        22
-
-Inserção: Chave 4 -- Valor 4
-Tamanho: 11
-
-          0
-
-                              1
-
-                                        2
-
-                    3
-
-4
-
-                    5
-
-                              8
-
-          12
-
-                    15
-
-                              17
-
-                                        22
-
-Inserção: Chave 16 -- Valor 16
-Tamanho: 12
-
-                              0
-
-                                                  1
-
-                                                            2
-
-                                        3
-
-                    4
-
-                              5
-
-                                        8
-
-          12
-
-                    15
-
-16
-
-          17
-
-                    22
-
-Inserção: Chave 10 -- Valor 10
-Tamanho: 13
-
-                    0
-
-                                        1
-
-                                                  2
-
-                              3
 
           4
 
-                              5
+                    3
 
-                    8
+Inserção: Chave 10 -- Valor 10
+Tamanho: 4
 
 10
 
-                    12
+          5
 
-                              15
-
-          16
-
-                    17
-
-                              22
-
-Remoção: Chave 10
-Tamanho: 12
-
-                    0
-
-                                        1
-
-                                                  2
+                    4
 
                               3
 
-          4
-
-                    5
-
-8
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-Tamanho: 12
-
-                    0
-
-                                        1
-
-                                                  2
-
-                              3
-
-          4
-
-                    5
-
-8
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-Tamanho: 12
-
-                    0
-
-                                        1
-
-                                                  2
-
-                              3
-
-          4
-
-                    5
-
-8
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-
-Remoção: Chave 8
-Tamanho: 11
-
-                    0
-
-                                        1
-
-                                                  2
-
-                              3
-
-          4
-
-5
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-
-Remoção: Chave 5
-Tamanho: 10
-
-          0
-
-                              1
-
-                                        2
-
-                    3
-
-4
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-Tamanho: 10
-
-          0
-
-                              1
-
-                                        2
-
-                    3
-
-4
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-Tamanho: 10
-
-          0
-
-                              1
-
-                                        2
-
-                    3
-
-4
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-
-Remoção: Chave 4
-Tamanho: 9
-
-          0
-
-                    1
-
-                              2
-
-3
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-
-Remoção: Chave 3
-Tamanho: 8
-
-                    0
-
-          1
-
-2
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-
-Remoção: Chave 2
-Tamanho: 7
-
-          0
-
-1
-
-                    12
-
-                              15
-
-          16
-
-                    17
-
-                              22
-
-Remoção: Chave 16
-Tamanho: 6
-
-                              0
-
-                    1
-
-          12
-
-15
-
-          17
-
-                    22
-
-Remoção: Chave 15
+Inserção: Chave 72 -- Valor 72
 Tamanho: 5
 
-                    0
+72
 
-          1
+          10
 
-12
+                    5
 
-          17
+                              4
 
-                    22
+                                        3
 
-Remoção: Chave 22
-Tamanho: 4
+Inserção: Chave 45 -- Valor 45
+Tamanho: 6
 
-                              0
+          72
 
-                    1
+45
 
-          12
+          10
 
-17
+                    5
 
-Remoção: Chave 1
-Tamanho: 3
+                              4
 
-0
+                                        3
 
-          12
+Inserção: Chave 9 -- Valor 9
+Tamanho: 7
 
-                    17
+                    72
 
-Remoção: Chave 12
-Tamanho: 2
+          45
 
-0
+                    10
 
-          17
+9
 
-Remoção: Chave 0
-Tamanho: 1
+          5
 
-17
+                    4
 
-Remoção: Chave 17
-Tamanho: 0
+                              3
 
-Remoção: Chave 4
-Tamanho: 0
-Tamanho: 0
+Inserção: Chave 11 -- Valor 11
+Tamanho: 8
+
+                    72
+
+          45
+
+11
+
+                    10
+
+          9
+
+                    5
+
+                              4
+
+                                        3
+
+Inserção: Chave 7 -- Valor 7
+Tamanho: 9
+
+                              72
+
+                    45
+
+          11
+
+                              10
+
+                    9
+
+7
+
+          5
+
+                    4
+
+                              3
+
+Inserção: Chave 80 -- Valor 80
+Tamanho: 10
+
+80
+
+                    72
+
+                              45
+
+          11
+
+                                        10
+
+                              9
+
+                    7
+
+                              5
+
+                                        4
+
+                                                  3
+
+Inserção: Chave 85 -- Valor 85
+Tamanho: 11
+
+85
+
+          80
+
+                              72
+
+                                        45
+
+                    11
+
+                                                  10
+
+                                        9
+
+                              7
+
+                                        5
+
+                                                  4
+
+                                                            3
+
+Inserção: Chave 90 -- Valor 90
+Tamanho: 12
+
+90
+
+          85
+
+                    80
+
+                                        72
+
+                                                  45
+
+                              11
+
+                                                            10
+
+                                                  9
+
+                                        7
+
+                                                  5
+
+                                                            4
+
+                                                                      3
+
+Inserção: Chave 23 -- Valor 23
+Tamanho: 13
+
+                    90
+
+          85
+
+                    80
+
+                                        72
+
+                              45
+
+23
+
+          11
+
+                                        10
+
+                              9
+
+                    7
+
+                              5
+
+                                        4
+
+                                                  3
+Tamanho: 13
+
+                    90
+
+          85
+
+                    80
+
+                                        72
+
+                              45
+
+23
+
+          11
+
+                                        10
+
+                              9
+
+                    7
+
+                              5
+
+                                        4
+
+                                                  3

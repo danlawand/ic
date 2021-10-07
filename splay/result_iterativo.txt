@@ -1,1 +1,248 @@
-Tamanho: 0
+
+Inserção: Chave 3 -- Valor 3
+Tamanho: 1
+
+3
+
+Inserção: Chave 4 -- Valor 4
+Tamanho: 2
+
+4
+
+          3
+
+Inserção: Chave 5 -- Valor 5
+Tamanho: 3
+
+5
+
+          4
+
+                    3
+
+Inserção: Chave 10 -- Valor 10
+Tamanho: 4
+
+10
+
+          5
+
+                    4
+
+                              3
+
+Inserção: Chave 72 -- Valor 72
+Tamanho: 5
+
+72
+
+          10
+
+                    5
+
+                              4
+
+                                        3
+
+Inserção: Chave 45 -- Valor 45
+Tamanho: 6
+
+          72
+
+45
+
+          10
+
+                    5
+
+                              4
+
+                                        3
+
+Inserção: Chave 9 -- Valor 9
+Tamanho: 7
+
+                    72
+
+          45
+
+                    10
+
+9
+
+          5
+
+                    4
+
+                              3
+
+Inserção: Chave 11 -- Valor 11
+Tamanho: 8
+
+                    72
+
+          45
+
+11
+
+                    10
+
+          9
+
+                    5
+
+                              4
+
+                                        3
+
+Inserção: Chave 7 -- Valor 7
+Tamanho: 9
+
+                              72
+
+                    45
+
+          11
+
+                              10
+
+                    9
+
+7
+
+          5
+
+                    4
+
+                              3
+
+Inserção: Chave 80 -- Valor 80
+Tamanho: 10
+
+80
+
+                    72
+
+                              45
+
+          11
+
+                                        10
+
+                              9
+
+                    7
+
+                              5
+
+                                        4
+
+                                                  3
+
+Inserção: Chave 85 -- Valor 85
+Tamanho: 11
+
+85
+
+          80
+
+                              72
+
+                                        45
+
+                    11
+
+                                                  10
+
+                                        9
+
+                              7
+
+                                        5
+
+                                                  4
+
+                                                            3
+
+Inserção: Chave 90 -- Valor 90
+Tamanho: 12
+
+90
+
+          85
+
+                    80
+
+                                        72
+
+                                                  45
+
+                              11
+
+                                                            10
+
+                                                  9
+
+                                        7
+
+                                                  5
+
+                                                            4
+
+                                                                      3
+
+Inserção: Chave 23 -- Valor 23
+Tamanho: 13
+
+                    90
+
+          85
+
+                    80
+
+                                        72
+
+                              45
+
+23
+
+          11
+
+                                        10
+
+                              9
+
+                    7
+
+                              5
+
+                                        4
+
+                                                  3
+Tamanho: 13
+
+                    90
+
+          85
+
+                    80
+
+                                        72
+
+                              45
+
+23
+
+          11
+
+                                        10
+
+                              9
+
+                    7
+
+                              5
+
+                                        4
+
+                                                  3

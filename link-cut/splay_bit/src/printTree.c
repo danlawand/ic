@@ -19,7 +19,7 @@ static void print2DUtil(Node x, int space, FILE *pFile)
 	space += COUNT;
 
 	// Process right child first
-	print2DUtil(x->right, space, pFile);
+	print2DUtil(x->children[0], space, pFile);
 
 	// Print current node after space
 	// count
@@ -29,7 +29,7 @@ static void print2DUtil(Node x, int space, FILE *pFile)
 	fprintf(pFile,"%d\n", x->val);
 
 	// Process left child
-	print2DUtil(x->left, space, pFile);
+	print2DUtil(x->children[1], space, pFile);
 }
 
 // Wrapper over print2DUtil()

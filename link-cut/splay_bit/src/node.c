@@ -8,8 +8,8 @@ Node newNode(Key key, Value val, Node left, Node right, Node parent, Node pathPa
 	Node p = mallocSafe(sizeof(*p));
 	p->key = key;
 	p->val = val;
-	p->children[0] = right;
-	p->children[1] = left;
+	p->children[1] = right;
+	p->children[0] = left;
 
 	// p->left = left;
 	// p->right = right;

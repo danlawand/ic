@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// children[0] == right
-// children[1] == left
+// children[1] == right
+// children[0] == left
 static Node  root; 				/*root of Splay Tree*/
 static Node  split_roots[2];
 
@@ -36,7 +36,9 @@ Value getSPLAY(Key key) {
 }
 
 void putSPLAY(Key key, Value val) {
-	putIterativo(key, val);
+	Node x;
+	x = putRec(key, val);
+	splay(x);
 }
 
 void deleteSPLAY(Key key) {
@@ -114,22 +116,72 @@ static int size(Node x) {
 static Value getValue(Node x, Key key) {
 	if (x == NULL) return valueNull();
 	int cmp = compareKeys(key, x->key);
-	if (cmp < 0) return getValue(x->children[1], key);
-	else if (cmp > 0) return getValue(x->children[0], key);
-	else return x->val;
+	
+	if (cmp == 0) return x->val;
+	
+	Node child;
+	if (cmp < 0) child = x->children[x->bit];	
+	else child = x->children[1 - x->bit];		
+
+	if (child != NULL) child->bit ^= x->bit;
+
+	Value gV;
+	gV = getValue(child, key);
+	
+	if (child != NULL) child->bit ^= x->bit;
+	return gV
 }
 
 static Node getNode(Node x, Key key) {
 	if (x == NULL) return NULL;
 	int cmp = compareKeys(key, x->key);
-	if (cmp < 0) return getNode(x->children[1], key);
-	else if (cmp > 0) return getNode(x->children[0], key);
-	else return x;
+
+	if (cmp == 0) return x;
+
+	Node child;
+	if (cmp < 0) child = x->children[x->bit];	
+	else child = x->children[1 - x->bit];		
+
+	if (child != NULL) child->bit ^= x->bit;
+
+	Node gN;
+	gN = getNode(child, key);
+	
+	if (child != NULL) child->bit ^= x->bit;
+	return gN
+}
+
+static Node putRec(Node x, Key key) {
+	if (x == NULL) {
+		x = newNode(key, val, NULL, NULL, NULL, NULL, 0, 1);
+		return x;
+	}
+	
+	int cmp = compareKeys(key, x->key);
+
+	if (cmp == 0) { 
+		x->val = val;
+		return x;
+	}
+
+	Node child;
+	if (cmp < 0) child = x->children[x->bit];
+
+	else child = x->children[1 - x->bit];		
+
+	if (child != NULL) child->bit ^= x->bit;
+
+	Node gN;
+	gN = putRec(child, key);
+	
+	if (child != NULL) child->bit ^= x->bit;
+
+	return gN
 }
 
 static void putIterativo(Key key, Value val) {
 	if (root == NULL) {
-		root = newNode(key, val, NULL, NULL, NULL, NULL, 1, 1);
+		root = newNode(key, val, NULL, NULL, NULL, NULL, 0, 1);
 		return;
 	}
 	Node v = root;
@@ -138,9 +190,9 @@ static void putIterativo(Key key, Value val) {
 	esq = 0;
 	while(1) {
 		if (v == NULL) {
-			v = newNode(key, val, NULL, NULL, q, NULL, 1, 1);
-			if (esq) q->children[1] = v;
-			else q->children[0] = v;
+			v = newNode(key, val, NULL, NULL, q, NULL, 0, 1);
+			if (esq) q->children[x->bit] = v;
+			else q->children[1 - x->bit] = v;
 
 			while(q != NULL) {
 				q->N = q->N + 1;
@@ -150,18 +202,19 @@ static void putIterativo(Key key, Value val) {
 			break;
 		} else {
 			cmp = compareKeys(key, v->key);
-			if (cmp < 0) {
-				esq = 1;
-				q = v;
-				v = v->children[1];
-			} else if (cmp > 0) {
-				esq = 0;
-				q = v;
-				v = v->children[0];
-			} else {
+			if (cmp == 0) {
 				v->val = val;
 				break;
 			}
+			if (cmp < 0) {
+				esq = 1 - x->bit;
+				q = v;
+				v = v->children[x->bit];
+			} else {
+				esq = x->bit;
+				q = v;
+				v = v->children[1 - x->bit];
+			} 
 		}
 		
 	}
@@ -171,6 +224,18 @@ static void putIterativo(Key key, Value val) {
 	//root->key = v->key;
 
 }
+
+
+// Supondo qe estou no x e que o x->bit esta restaurado para o bit original
+//Rotate(x)
+// p = x->parent
+// if p->children[p->bit] == x {
+// 	p->children[p->bit] = x->children[1 - p->bit^x->bit]
+// 	x->children[1 - p->bit^x->bit] = p
+//}
+//else { similar para o: 1 - p->bit
+//	
+//}
 
 static void rotateRight (Node h) {
 	// x is the left child of parent h

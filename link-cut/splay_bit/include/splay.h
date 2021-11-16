@@ -14,4 +14,5 @@ int isRoot(Node);
 void printTree(FILE*);
 void printRoot();
 void printPai();
+void revertSPLAY();
 #endif

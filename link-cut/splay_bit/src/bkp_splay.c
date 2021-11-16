@@ -3,11 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void *mallocSafe(size_t);
-
-static SplayRoots rootsHead;
-
-static Node  root; /*root of Splay Tree*/
+// children[1] == right
+// children[0] == left
+static Node  root; 				/*root of Splay Tree*/
 static Node  split_roots[2];
 
 static int   size(Node);
@@ -38,7 +36,9 @@ Value getSPLAY(Key key) {
 }
 
 void putSPLAY(Key key, Value val) {
-	putIterativo(key, val);
+	Node x;
+	x = putRec(key, val);
+	splay(x);
 }
 
 void deleteSPLAY(Key key) {
@@ -48,6 +48,7 @@ void deleteSPLAY(Key key) {
 	printf("Remocao completa da chave: %d\n", key);
 }
 
+
 void splay (Node x) {
 	while (x->parent != NULL) {
 		
@@ -55,7 +56,7 @@ void splay (Node x) {
 		if (x->parent->parent == NULL) {
 
 			//If it's the left child
-			if (x == x->parent->left) {
+			if (x == x->parent->children[1]) {
 				// zig rotation
 				rotateRight(x->parent);
 			} 
@@ -66,19 +67,19 @@ void splay (Node x) {
 			}
 		}
 		//If It's the left child and it's parent is the left child
-		else if (x == x->parent->left && x->parent == x->parent->parent->left) {
+		else if (x == x->parent->children[1] && x->parent == x->parent->parent->children[1]) {
 			// zig-zig rotation
 			rotateRight(x->parent->parent);
 			rotateRight(x->parent);
 		}
 		//If It's the right child and it's parent is the right child
-		else if (x == x->parent->right && x->parent == x->parent->parent->right) {
+		else if (x == x->parent->children[0] && x->parent == x->parent->parent->children[0]) {
 			// zag-zag rotation
 			rotateLeft(x->parent->parent);
 			rotateLeft(x->parent);
 		}
 		//If It's the right child and it's parent is the left child
-		else if (x == x->parent->right && x->parent == x->parent->parent->left) {
+		else if (x == x->parent->children[0] && x->parent == x->parent->parent->children[1]) {
 			// zig-zag rotation
 			rotateLeft(x->parent);
 			rotateRight(x->parent);
@@ -101,31 +102,80 @@ int isRoot(Node x) {
 
 
 /************************   AUXILIARY FUNCTIONS ************************/
-
 static int size(Node x) {
 	if (x == NULL) return 0;
 	return x->N;
 }
-//Posso inserir um parametro a mais para identificar o bit
+
 static Value getValue(Node x, Key key) {
 	if (x == NULL) return valueNull();
 	int cmp = compareKeys(key, x->key);
-	if (cmp < 0) return getValue(x->left, key);
-	else if (cmp > 0) return getValue(x->right, key);
-	else return x->val;
+	
+	if (cmp == 0) return x->val;
+	
+	Node child;
+	if (cmp < 0) child = x->children[x->bit];	
+	else child = x->children[1 - x->bit];		
+
+	if (child != NULL) child->bit ^= x->bit;
+
+	Value gV;
+	gV = getValue(child, key);
+	
+	if (child != NULL) child->bit ^= x->bit;
+	return gV
 }
 
 static Node getNode(Node x, Key key) {
 	if (x == NULL) return NULL;
 	int cmp = compareKeys(key, x->key);
-	if (cmp < 0) return getNode(x->left, key);
-	else if (cmp > 0) return getNode(x->right, key);
-	else return x;
+
+	if (cmp == 0) return x;
+
+	Node child;
+	if (cmp < 0) child = x->children[x->bit];	
+	else child = x->children[1 - x->bit];		
+
+	if (child != NULL) child->bit ^= x->bit;
+
+	Node gN;
+	gN = getNode(child, key);
+	
+	if (child != NULL) child->bit ^= x->bit;
+	return gN
+}
+
+static Node putRec(Node x, Key key) {
+	if (x == NULL) {
+		x = newNode(key, val, NULL, NULL, NULL, NULL, 0, 1);
+		return x;
+	}
+	
+	int cmp = compareKeys(key, x->key);
+
+	if (cmp == 0) { 
+		x->val = val;
+		return x;
+	}
+
+	Node child;
+	if (cmp < 0) child = x->children[x->bit];
+
+	else child = x->children[1 - x->bit];		
+
+	if (child != NULL) child->bit ^= x->bit;
+
+	Node gN;
+	gN = putRec(child, key);
+	
+	if (child != NULL) child->bit ^= x->bit;
+
+	return gN
 }
 
 static void putIterativo(Key key, Value val) {
 	if (root == NULL) {
-		root = newNode(key, val, NULL, NULL, NULL, NULL, 1);
+		root = newNode(key, val, NULL, NULL, NULL, NULL, 0, 1);
 		return;
 	}
 	Node v = root;
@@ -134,9 +184,9 @@ static void putIterativo(Key key, Value val) {
 	esq = 0;
 	while(1) {
 		if (v == NULL) {
-			v = newNode(key, val, NULL, NULL, q, NULL, 1);
-			if (esq) q->left = v;
-			else q->right = v;
+			v = newNode(key, val, NULL, NULL, q, NULL, 0, 1);
+			if (esq) q->children[x->bit] = v;
+			else q->children[1 - x->bit] = v;
 
 			while(q != NULL) {
 				q->N = q->N + 1;
@@ -146,18 +196,19 @@ static void putIterativo(Key key, Value val) {
 			break;
 		} else {
 			cmp = compareKeys(key, v->key);
-			if (cmp < 0) {
-				esq = 1;
-				q = v;
-				v = v->left;
-			} else if (cmp > 0) {
-				esq = 0;
-				q = v;
-				v = v->right;
-			} else {
+			if (cmp == 0) {
 				v->val = val;
 				break;
 			}
+			if (cmp < 0) {
+				esq = 1 - x->bit;
+				q = v;
+				v = v->children[x->bit];
+			} else {
+				esq = x->bit;
+				q = v;
+				v = v->children[1 - x->bit];
+			} 
 		}
 		
 	}
@@ -168,6 +219,20 @@ static void putIterativo(Key key, Value val) {
 
 }
 
+
+// Supondo qe estou no x e que o x->bit esta restaurado para o bit original
+static void rotate(Node x) {
+	p = x->parent;
+	if p->children[p->bit] == x {
+		p->children[p->bit] = x->children[1 - p->bit^x->bit]
+		x->children[1 - p->bit^x->bit] = p
+	}
+	else { //similar para o: 1 - p->bit
+		
+	}	
+}
+
+
 static void rotateRight (Node h) {
 	// x is the left child of parent h
 	// We rotate h to the right
@@ -175,32 +240,28 @@ static void rotateRight (Node h) {
 
 	Node hParent = h->parent;
 
-	Node x = h->left;
-	// Mudança de Path-parent vinda pela Link-cut Tree  
-	x->pathParent = h->pathParent;
-	h->pathParent = NULL;
-	
-	h->left = x->right;
+	Node x = h->children[1];
+	h->children[1] = x->children[0];
 
 	// A subarvore que era filha, agora é filha de h,
 	// mas ela precisa saber quem é seu pai agr
-	if (h->left != NULL) h->left->parent = h;
+	if (h->children[1] != NULL) h->children[1]->parent = h;
 
-	x->right = h;
+	x->children[0] = h;
 
 	x->parent = h->parent;
 	h->parent = x;
 
 	if (hParent != NULL) {
-		if (hParent->right == h) {
-			hParent->right = x;
+		if (hParent->children[0] == h) {
+			hParent->children[0] = x;
 		} else {
-			hParent->left = x;
+			hParent->children[1] = x;
 		}
 	}
 
 	x->N = h->N; 
-	h->N = size(h->left) + size(h->right) + 1;
+	h->N = size(h->children[1]) + size(h->children[0]) + 1;
 }
 
 static void rotateLeft (Node h) {
@@ -209,36 +270,32 @@ static void rotateLeft (Node h) {
 	// and h become left child of x 
 	Node hParent = h->parent;
 
-	Node x = h->right;
-	// Mudança de Path-parent vinda pela Link-cut Tree  
-	x->pathParent = h->pathParent;
-	h->pathParent = NULL;
-	
-	h->right = x->left;
+	Node x = h->children[0];
+	h->children[0] = x->children[1];
 
 	// A subarvore que era filha, agora é filha de h,
 	// mas ela precisa saber quem é seu pai agr
-	if (h->right != NULL) h->right->parent = h;
+	if (h->children[0] != NULL) h->children[0]->parent = h;
 
-	x->left = h;
+	x->children[1] = h;
 
 	x->parent = h->parent;
 	h->parent = x;
 
 	if (hParent != NULL) {
-		if (hParent->right == h) {
-			hParent->right = x;
+		if (hParent->children[0] == h) {
+			hParent->children[0] = x;
 		} else {
-			hParent->left = x;
+			hParent->children[1] = x;
 		}
 	}
 
 	x->N = h->N; 
-	h->N = size(h->left) + size(h->right) + 1;
+	h->N = size(h->children[1]) + size(h->children[0]) + 1;
 }
 
 
-//All the items in S are smaller than the items in T (Greater)
+//All the items in S are smaller than the items in T
 static Node join(Node S, Node T) {
 	if (S == NULL) return T;
 	if (T == NULL) return S;
@@ -246,29 +303,29 @@ static Node join(Node S, Node T) {
 	Node x = maximum(S);
 	splay(x);
 
-	x->right = T;
+	x->children[0] = T;
 	T->parent = x;
 
 	//x is the root of the joining tree
-	x->N = size(x->left) + size(x->right) + 1;
+	x->N = size(x->children[1]) + size(x->children[0]) + 1;
 	return x;
 }
 
 static Node maximum(Node x) {
-	if (x->right == NULL) return x;
-	return maximum(x->right);
+	if (x->children[0] == NULL) return x;
+	return maximum(x->children[0]);
 }
 
 static Node* split(Node x) {
 	Node S, T;
 	splay(x);
-	T = x->right;
-	if (x->right != NULL) T->parent = NULL;
+	T = x->children[0];
+	if (x->children[0] != NULL) T->parent = NULL;
 	
 
 	S = x;
-	S->right = NULL;
-	S->N = size(S->left) + 1;
+	S->children[0] = NULL;
+	S->N = size(S->children[1]) + 1;
 
 	x = NULL;
 
@@ -285,22 +342,12 @@ static void delete(Node x) {
 	trees = split(x);
 
 	//x->left->parent = x
-	if (trees[0]->left != NULL) trees[0]->left->parent = NULL;
+	if (trees[0]->children[1] != NULL) trees[0]->children[1]->parent = NULL;
 
-	root = join(trees[0]->left, trees[1]);
+	root = join(trees[0]->children[1], trees[1]);
 	trees[0] = NULL;
 	trees[1] = NULL;
 }
-
-static void *mallocSafe(size_t nbytes) {
-	void *p = malloc(nbytes);
-	if (p == NULL) {
-		printf("Erro: alocação de memória falhou no módulo node.\n");
-		exit(0);
-	}
-	return p;
-}
-
 
 /************************   PRINT FUNCTIONS ************************/
 
@@ -317,12 +364,9 @@ void printRoot() {
 
 
 static void printSPLAY(Node x, int i) {
-	int pai;
 	if (x != NULL) {
-		printSPLAY(x->left, i+1);
-		if (x->parent == NULL) pai = 0;
-		else pai = x->parent->key;
+		printSPLAY(x->children[1], i+1);
 		printf("%*d:%d\n", 2*i, x->val, x->N);
-		printSPLAY(x->right, i+1);
+		printSPLAY(x->children[0], i+1);
 	}
 }

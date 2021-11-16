@@ -33,6 +33,8 @@ int main(int argc, char * argv[]) {
 			printValue(val);
 		} else if (c == 't') {
 			printf("%d\n", sizeSPLAY());
+		} else if (c == 'b') {
+			revertSPLAY();
 		}
 		fprintf(pFile, "Tamanho: %d\n", sizeSPLAY());
 		printTree(pFile);

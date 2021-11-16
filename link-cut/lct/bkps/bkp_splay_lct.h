@@ -9,6 +9,7 @@ struct splayRoots {
 	Node root;
 };
 
+// int initSplay();
 void splay(Node);
 Value getSPLAY(Key);
 void putSPLAY(Key, Value);
@@ -19,6 +20,7 @@ int isRoot(Node);
 void printTree(FILE*);
 void printRoot();
 void printPai();
+void revertSPLAY();
 
 void initSplay(int);
 

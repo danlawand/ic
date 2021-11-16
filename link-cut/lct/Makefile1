@@ -1,0 +1,43 @@
+# Splay implementation Makefile for Scientific Initiation
+
+# Object Files
+OBJ= 
+
+# Compiler Link
+CC=gcc
+
+#Flags for compiler
+CC_FLAGS=-Wall -ansi -pedantic
+
+# Command used at clean target
+RM = rm -rf
+
+OBJS 		= testaIterativo.o lct.o splay.o node.o item.o
+EXEC 		= testaIterativo
+
+# ----------------------------------------------------------
+all: $(EXEC)
+
+testaIterativo: $(OBJS)
+	$(CC) $(OBJS) -o testaIterativo -lm
+
+testaIterativo.o: testaIterativo.c lct.o splay.o node.o item.o
+	$(CC) $(CFLAGS) -c testaIterativo.c
+
+lct.o: lct.c lct.h
+	$(CC) $(CFLAGS) -c lct.c
+
+# printTree.o: printTree.c printTree.h
+# 	$(CC) $(CFLAGS) -c printTree.c
+
+splay.o: splay.c splay.h
+	$(CC) $(CFLAGS) -c splay.c
+
+node.o: node.c node.h
+	$(CC) $(CFLAGS) -c node.c
+
+item.o: item.c item.h
+	$(CC) $(CFLAGS) -c item.c
+
+clean:
+	$(RM) *.o *~ $(EXEC)

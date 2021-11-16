@@ -1,43 +1,53 @@
-# Splay implementation Makefile for Scientific Initiation
+# Splay Tree implementation Makefile for Scientific Initiation
 
-# Object Files
-OBJ= 
+C_FLAGS := -Wall -pedantic
+CC := gcc
+RM := rm
 
-# Compiler Link
-CC=gcc
+.PHONY: $(TARGET)
+.PHONY: clean
 
-#Flags for compiler
-CC_FLAGS=-Wall -ansi -pedantic
+VPATH:= ./src/ ./obj/ ./include/
 
-# Command used at clean target
-RM = rm -rf
+# Path for .c , .h and .o Files 
+SRC_PATH := ./src/
+OBJ_PATH := ./obj/
+INC_PATH := -I ./include
 
-OBJS 		= testaIterativo.o lct.o splay.o printTree.o node.o item.o
-EXEC 		= testaIterativo
+# Executable Name 
+TARGET1 := iterative_exe
+# TARGET2 := automatic_exe
 
-# ----------------------------------------------------------
-all: $(EXEC)
+# Files to compile
+OBJ_iterative := testaIterativo.o lct.o splay.o node.o item.o
 
-testaIterativo: $(OBJS)
-	$(CC) $(OBJS) -o testaIterativo -lm
+# OBJ_automatic := testaAutoma.o splay.o node.o item.o
 
-testaIterativo.o: testaIterativo.c lct.o splay.o printTree.o node.o item.o
-	$(CC) $(CFLAGS) -c testaIterativo.c
+OBJ1 := $(patsubst %,$(OBJ_PATH)%,$(OBJ_iterative))
 
-lct.o: lct.c lct.h
-	$(CC) $(CFLAGS) -c lct.c
+# OBJ2 := $(patsubst %,$(OBJ_PATH)%,$(OBJ_automatic))
 
-printTree.o: printTree.c printTree.h
-	$(CC) $(CFLAGS) -c printTree.c
+# Build .o first
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+	@echo [CC] $<
+	@$(CC) $(C_FLAGS) -o $@ -c $< $(INC_PATH)
 
-splay.o: splay.c splay.h
-	$(CC) $(CFLAGS) -c splay.c
 
-node.o: node.c node.h
-	$(CC) $(CFLAGS) -c node.c
+# Build final Binary
+# all: $(TARGET1) $(TARGET2)
 
-item.o: item.c item.h
-	$(CC) $(CFLAGS) -c item.c
+$(TARGET1):      $(OBJ1)
+	@echo [INFO] Creating Binary Executable for Iterative File [$(TARGET1)]
+	@$(CC) -o $@ $^
 
-clean:
-	$(RM) *.o *~ $(EXEC)
+# $(TARGET2):      $(OBJ2)
+# 	@echo [INFO] Creating Binary Executable for Automatic File [$(TARGET2)]
+# 	@$(CC) -o $@ $^
+
+
+# Clean all the object files and the binary
+clean:   
+	@echo "[Cleaning]"
+	@$(RM) -rfv $(OBJ_PATH)*
+	@$(RM) -rfv $(TARGET1)
+	@$(RM) -rfv $(TARGET2)

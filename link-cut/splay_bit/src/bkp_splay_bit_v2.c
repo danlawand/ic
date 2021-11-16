@@ -5,7 +5,6 @@
 
 // children[1] == right
 // children[0] == left
-static int   bit = 1;
 static Node  root; 				/*root of Splay Tree*/
 static Node  split_roots[2];
 
@@ -22,9 +21,6 @@ static Node  join(Node, Node);
 static Node* split(Node);
 static void  delete(Node);
 static void  printSPLAY(Node, int);
-static void pushBitDown(Node);
-static int compareKeys(Key, Key);
-
 
 int sizeSPLAY() {
 	return size(root);
@@ -46,7 +42,6 @@ void putSPLAY(Key key, Value val) {
 	x = putRec(root, key, val);
 	if (root == NULL) root = x;
 	splay(x);
-	// x->bit = 1;
 }
 
 void deleteSPLAY(Key key) {
@@ -56,20 +51,17 @@ void deleteSPLAY(Key key) {
 	printf("Remocao completa da chave: %d\n", key);
 }
 
-void revertSPLAY() {
-	bit = -bit;
-	root->bit = 1 - root->bit;
-}
-
-int compareKeys(Key k1, Key k2) {
-	return bit * (k1 - k2);
-}
 
 void splay (Node x) {
+	int i;
+	// char c;
+	printf("----SPLAY----\n");
 	while (x->parent != NULL) {
-
+		printf("----\n");
+		printSPLAY(x, 1);
+		printf("----\n");
 		Node p = x->parent;
-
+		// scanf("%d ",&i);
 		//If the father is the root
 		if (p->parent == NULL) rotate(x);
 
@@ -150,9 +142,7 @@ static Node putRec(Node x, Key key, Value val) {
 		x = newNode(key, val, NULL, NULL, NULL, NULL, 0, 1);
 		return x;
 	}
-
-	pushBitDown(x);
-
+	
 	int cmp = compareKeys(key, x->key);
 
 	if (cmp == 0) { 
@@ -161,17 +151,20 @@ static Node putRec(Node x, Key key, Value val) {
 	}
 
 	Node child;
-	if (cmp < 0) child = x->children[0];
+	if (cmp < 0) child = x->children[x->bit];
 
-	else child = x->children[1];		
+	else child = x->children[1 - x->bit];		
+
+	if (child != NULL) child->bit ^= x->bit;
 
 	Node gN;
 	gN = putRec(child, key, val);
 	
-	if (child == NULL) {
+	if (child != NULL) child->bit ^= x->bit;
+	else {
 		gN->parent = x;
-		if (cmp < 0) x->children[0] = gN;
-		else x->children[1] = gN;
+		if (cmp < 0) x->children[x->bit] = gN;
+		else x->children[1 - x->bit] = gN;
 	}
 	return gN;
 }
@@ -192,28 +185,11 @@ static void pushBitUp(Node x) {
 	Node p = x->parent;
 	p->bit = 1 - p->bit;
 	Node s = sibling(x);
-	if (s != NULL) s->bit = 1 - s->bit;
+	s->bit = 1 - s->bit;
 	swapChildren(p);
 	x->bit = 0;
 }
 
-
-static void pushBitDown(Node x) {
-	if (x->bit == 1) {
-		swapChildren(x);
-		x->bit = 0;
-	
-		Node cLeft = x->children[0];
-		if (cLeft != NULL) {
-			cLeft->bit = 1 - cLeft->bit;
-		}
-
-		Node cRight = x->children[1];
-		if (cRight != NULL) {
-			cRight->bit = 1 - cRight->bit;
-		}
-	}
-}
 
 //Talvez tenha que considerar o bit do 'p'
 static void rotate(Node x) {
@@ -253,7 +229,8 @@ static Node join(Node S, Node T) {
 	Node x = maximum(S);
 	splay(x);
 
-	x->children[1] = T;
+	x->children[1-x->bit] = T;
+	T->bit ^= x->bit;
 	T->parent = x;
 
 	//x is the root of the joining tree
@@ -262,12 +239,10 @@ static Node join(Node S, Node T) {
 }
 
 static Node maximum(Node x) {
-	pushBitDown(x);
-	if (x->children[1] == NULL) return x;
-	return maximum(x->children[1]);
+	if (x->children[1-x->bit] == NULL) return x;
+	return maximum(x->children[1-x->bit]);
 }
 
-//Assumimos que o 
 static Node* split(Node x) {
 	Node S, T;
 	splay(x);
@@ -330,24 +305,8 @@ void printRoot() {
 
 static void printSPLAY(Node x, int i) {
 	if (x != NULL) {
-		Node child;
-		child  = x->children[0];
-		if (child != NULL) child->bit ^= x->bit;
-		child  = x->children[1];
-		if (child != NULL) child->bit ^= x->bit;
-		
-		printSPLAY(x->children[1 - x->bit], i+1);
-		int bparent = 0;
-		if (x->parent != NULL) {
-			bparent = x->parent->bit;
-		}
-		printf("%*d:%d\n", 2*i, x->val, x->bit^bparent);
-		printSPLAY(x->children[x->bit], i+1);
-
-		child  = x->children[0];
-		if (child != NULL) child->bit ^= x->bit;
-		child  = x->children[1];
-		if (child != NULL) child->bit ^= x->bit;
-
+		printSPLAY(x->children[1], i+1);
+		printf("%*d:%d\n", 2*i, x->val, x->N);
+		printSPLAY(x->children[0], i+1);
 	}
 }

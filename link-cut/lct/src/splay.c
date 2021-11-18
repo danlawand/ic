@@ -79,18 +79,26 @@ Node minimum(Node x) {
 
 /************************   AUXILIARY FUNCTIONS ************************/
 
+// devolve o irmão de x
 static Node sibling(Node x) {
 	Node p = x->parent;
 	if (p->children[0] == x) return p->children[1];
 	else return p->children[0];
 }
 
+// inverte os filhos
 static void swapChildren(Node p) {
 	Node aux = p->children[0];
 	p->children[0] = p->children[1];
 	p->children[1] = aux;
 }
 
+// A ideia é "jogar" o bit de x (que é 1, no caso do rotate) para o pai 'p', por isso "p->bit = 1 - p->bit;"
+
+// [PERGUNTA] - Por que inverto o bit do irmão? ---> Será que é porque eu faço swapChildren ?
+
+// inverte o bit do pai, inverte o bit do irmão e depois inverto os irmãos: 'x' com 's'
+// Invariante: o bit de x é 1
 static void pushBitUp(Node x) {
 	Node p = x->parent;
 	p->bit = 1 - p->bit;
@@ -118,7 +126,6 @@ static void pushBitDown(Node x) {
 	}
 }
 
-//Talvez tenha que considerar o bit do 'p'
 static void rotate(Node x) {
 	if (x->bit == 1) pushBitUp(x);
 
@@ -146,8 +153,6 @@ static void rotate(Node x) {
 	}
 }
 
-
-
 //All the items in S are smaller than the items in T
 static Node join(Node S, Node T) {
 	if (S == NULL) return T;
@@ -160,7 +165,6 @@ static Node join(Node S, Node T) {
 	T->parent = x;
 
 	//x is the root of the joining tree
-	// x->N = size(x->children[1]) + size(x->children[0]) + 1;
 	return x;
 }
 

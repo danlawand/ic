@@ -4,8 +4,13 @@
 static int chave;
 static int valor;
 
+// Funções auxiliares do access
 static void removePreferredChild(Node);
 static void switchPreferredChild(Node, Node);
+
+// função auxiliar de 'analisaSplay', para analisar em pre-ordem a splay 
+static void analisaPreOrdemSplay(Node x);
+
 
 void lctInit() {
 	chave = 0;
@@ -21,9 +26,6 @@ static void removePreferredChild(Node v) {
 		v->children[1 - v->bit]->pathParent = v;
 		v->children[1 - v->bit]->parent = NULL;
 	}
-	//Muda o bit(?) reverse-bit
-	//https://www.cs.cmu.edu/~sleator/papers/dynamic-trees.pdf 
-	// page 372
 	v->children[1 - v->bit] = NULL;
 }
 
@@ -37,7 +39,7 @@ static void switchPreferredChild(Node w, Node v) {
 	v->pathParent = NULL;
 }
 
-//Acessa o nó v, criando u  preferred path da raiz até o nó v
+//Acessa o nó v, criando o  preferred path da raiz até o nó v
 void access(Node v) {
 	Node w;
 	splay(v);
@@ -53,7 +55,6 @@ void access(Node v) {
 		switchPreferredChild(w, v);
 		splay(v);
 	}
-
 	//v é raiz da splay tree do preferred path
 }
 
@@ -66,10 +67,16 @@ void link(Node v, Node w) {
 	w->parent = v;
 }
 
-//Enraiza a árvore que contém o nó v no próprio nó v
+
+
+//Modifica a árvore que contém v para que v torne-se a raiz desta árvore
 void evert(Node v) {
 	access(v);
 	//nó v é a raiz
+
+	//reverte o bit
+	//https://www.cs.cmu.edu/~sleator/papers/dynamic-trees.pdf 
+	// page 372
 	v->bit = 1 - v->bit;
 }
 
@@ -79,20 +86,6 @@ Node findRoot(Node v) {
 	splay(r);
 	return r;
 }
-
-
-
-
-/*
-Reverse
-*/
-
-/*
-Queremos fazer o evert para enraizar 
-
-- evert(v): modifica a árvore que contém v para que v torne-se a raiz desta árvore
-(reverte as arestas no caminho de v até a raiz da sua árvore). 
-*/
 
 
 
@@ -135,7 +128,24 @@ void quemEhPathParent(Node x) {
 	}
 }
 
+// Sem a opção de imprimir em um arquivo
 void analisaNode(Node x) {
+	if (x == NULL) return;
+
+	printf("Sobre o %d\n", x->key);
+	quemEhDireito(x);
+	quemEhEsquerdo(x);
+	quemEhPai(x);
+	quemEhPathParent(x);
+	printf("\n");
+	if (x->parent == NULL) {
+		printSPLAY(x, 1);
+		printf("\n");
+	}
+}
+
+
+void analisa_Node_E_Imprime_em_arquivo(Node x, FILE *printFile) {
 	if (x == NULL) return;
 
 	printf("Sobre o %d\n", x->key);
@@ -152,7 +162,13 @@ void analisaNode(Node x) {
 
 void analisaSplay(Node x) {
 	if (x == NULL) return;
+	if (x->parent != NULL) x = findRoot(x);
+	analisaPreOrdemSplay(x);
+}
+// função auxiliar de 'analisaSplay', para analisar em pre-ordem a splay 
+static void analisaPreOrdemSplay(Node x) {
+	if (x == NULL) return;
 	analisaNode(x);
-	analisaSplay(x->children[1-x->bit]);
-	analisaSplay(x->children[x->bit]);
+	analisaPreOrdemSplay(x->children[1-x->bit]);
+	analisaPreOrdemSplay(x->children[x->bit]);
 }

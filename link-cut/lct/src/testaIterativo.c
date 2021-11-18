@@ -19,43 +19,60 @@ int main(int argc, char * argv[]) {
 		perror("Error while opening the file.\n");
 		exit(EXIT_FAILURE);
 	}
-
+	//buffer para o arquivo de entrada
 	char buffer[TAMANHO_MAX];
-	int n_vertices, i = 1;
-	int indice[2], tag_link = 2;
+
+	// identifica quantos nós teremos
+	int n_vertices;
+	
+	//variáveis auxiliares
+	int indice[2], tag_link = 2, i = 1;
 	indice[0] = 0;
 	indice[1] = 0;
 	
+	//iniciamos a nossa LinkCutTree (lct)
 	lctInit();
-	Node *represented_tree;
+
+	Node *nodes;
 	
 
-
-    while(fscanf(arquivo_entrada, "%s", buffer) && !feof(arquivo_entrada)){ /* le do arquivo */
+	/* le do arquivo */
+    while(fscanf(arquivo_entrada, "%s", buffer) && !feof(arquivo_entrada)){ 
+    	
+    	//Se for a primeira iteração, pegaremos a primeira linha do arquivo que é a quantidade de nós
     	if (i){ 
     		n_vertices = atoi(buffer);
     		
-    		represented_tree = mallocSafe(n_vertices*sizeof(Node));
+    		nodes = mallocSafe(n_vertices*sizeof(Node));
+
+    		//Crio 'n_vertices' árvores com apenas um vértice cada (Cada nodes[i] é a raiz de sua árvore)
     		for (int i = 0; i < n_vertices; ++i) {
-				represented_tree[i] = maketree();
+				nodes[i] = maketree();
 			}
 
     		printf("%d Vertices Criados\n",n_vertices);
     	}
     	i = 0; 
+    	//Vou pegar de dois em dois vértices para fazer a operação. 
+    	//tag_link indica qual vértice eu estou me referindo, se for zero equivale ao primeiro, se for 1 ao segundo 
     	if (tag_link < 2) {
+    		//Identifico o índice do vértice que realizaremos a operação, e atribuo no indice[0] ou indice[1]
     		indice[tag_link] = atoi(buffer);
+    		
+    		//Quando identificarmos o segundo nó, façamos:
     		if (tag_link == 1) {
+    			//realizaremos o link do nó com índice indice[0] + nó com índice indice[1]
     			printf("----- Link dos Vertices %d e %d -----\n",indice[tag_link-1], indice[tag_link]);
-    			if(findRoot(represented_tree[indice[tag_link-1]]) != represented_tree[indice[tag_link-1]]) {
-    				evert(represented_tree[indice[tag_link-1]]);
+    			if(findRoot(nodes[indice[tag_link-1]]) != nodes[indice[tag_link-1]]) {
+    				evert(nodes[indice[tag_link-1]]);
     			}
 
-    			link(represented_tree[indice[tag_link-1]], represented_tree[indice[tag_link]]);
+	    		//Invariante: o indice[1] sempre será a raiz da árvore dele
+    			link(nodes[indice[tag_link-1]], nodes[indice[tag_link]]);
 
-    			analisaSplay(represented_tree[indice[tag_link-1]]);
+    			analisaSplay(nodes[indice[tag_link-1]]);
 				printf("\n");
-				printSPLAY(represented_tree[indice[tag_link-1]], 1);
+				printSPLAY(nodes[indice[tag_link-1]], 1);
 				printf("\n");
     		}
     		tag_link++;
@@ -63,16 +80,14 @@ int main(int argc, char * argv[]) {
     	if (buffer[0] == '+') {
     		tag_link = 0;
     	}
-
     }
 
 	printf("\n------------- Print Final ---------------- \n\n");
 	for (int i = 0; i < n_vertices; ++i)
 	{
-		analisaNode(represented_tree[i]);
+		//Analiso cada nó, para ver como foi seu comportamento.
+		analisaNode(nodes[i]);
 	}
-
-
 
 	fclose (arquivo_entrada);
 }

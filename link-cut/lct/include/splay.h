@@ -9,4 +9,7 @@ void revertSPLAY();
 int isRoot(Node);
 void printSPLAY(Node, int);
 Node minimum(Node);
+Node* split(Node);
+Node maximum(Node);
+void pushBitDown(Node); 
 #endif

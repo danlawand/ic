@@ -16,15 +16,13 @@ static void swapChildren(Node);
 
 static void pushBitUp(Node);
 
-static void pushBitDown(Node);
+// static void pushBitDown(Node);
 
 static void  rotate(Node);
 
 static Node  join(Node, Node);
 
-static Node  maximum(Node); 
-
-static Node* split(Node);
+// static Node  maximum(Node); 
 
 
 
@@ -109,7 +107,7 @@ static void pushBitUp(Node x) {
 }
 
 
-static void pushBitDown(Node x) {
+void pushBitDown(Node x) {
 	if (x->bit == 1) {
 		swapChildren(x);
 		x->bit = 0;
@@ -168,13 +166,13 @@ static Node join(Node S, Node T) {
 	return x;
 }
 
-static Node maximum(Node x) {
+Node maximum(Node x) {
 	pushBitDown(x);
 	if (x->children[1] == NULL) return x;
 	return maximum(x->children[1]);
 }
 
-static Node* split(Node x) {
+Node* split(Node x) {
 	Node S, T;
 	splay(x);
 

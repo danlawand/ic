@@ -19,7 +19,7 @@ TARGET1 := iterative_exe
 # TARGET2 := automatic_exe
 
 # Files to compile
-OBJ_iterative := testaIterativo.o lct.o splay.o node.o item.o
+OBJ_iterative := testaIterativo.o analisaLct.o lct.o splay.o node.o item.o
 
 # OBJ_automatic := testaAutoma.o splay.o node.o item.o
 

@@ -12,7 +12,7 @@ CC_FLAGS=-Wall -ansi -pedantic
 # Command used at clean target
 RM = rm -rf
 
-OBJS 		= testaIterativo.o lct.o splay.o node.o item.o
+OBJS 		= testaIterativo.o analisaLct.o lct.o splay.o node.o item.o
 EXEC 		= testaIterativo
 
 # ----------------------------------------------------------

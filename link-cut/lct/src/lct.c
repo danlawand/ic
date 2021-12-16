@@ -8,10 +8,6 @@ static int valor;
 static void removePreferredChild(Node);
 static void switchPreferredChild(Node, Node);
 
-// função auxiliar de 'analisaSplay', para analisar em pre-ordem a splay 
-static void analisaPreOrdemSplay(Node x);
-
-
 void lctInit() {
 	chave = 0;
 	valor = 0;
@@ -39,6 +35,7 @@ static void switchPreferredChild(Node w, Node v) {
 	v->pathParent = NULL;
 }
 
+// Sleator refere ao access como expose(v)
 //Acessa o nó v, criando o  preferred path da raiz até o nó v
 void access(Node v) {
 	Node w;
@@ -59,15 +56,14 @@ void access(Node v) {
 }
 
 
-// u e v estão em árvores distintas e v é a raiz da sua árvore; junta as árvores de u e v, acrescentando a aresta v->u. 
+// v e w estão em árvores distintas e v é a raiz da sua árvore; 
+// junta as árvores de v e w, acrescentando a aresta v->w, fazendo w parent de v (ou v filho de w).
 void link(Node v, Node w) {
 	access(v);
 	access(w);
-	v->children[1 - v->bit] = w;
-	w->parent = v;
+	w->children[1 - w->bit] = v;
+	v->parent = w;
 }
-
-
 
 //Modifica a árvore que contém v para que v torne-se a raiz desta árvore
 void evert(Node v) {
@@ -87,88 +83,20 @@ Node findRoot(Node v) {
 	return r;
 }
 
+//pré-condição: v não é uma raiz de árvore; remove a aresta v->parent(v). 
+void cut(Node v) {
+	if (findRoot(v) == v) return;
 
 
-/*****************************************/
 
+	//acesso v, e v se torna raiz na sua splay tree
+	access(v);
 
-void quemEhDireito(Node x) {
-	if (x == NULL) return;
-	if(x->children[1 - x->bit] == NULL) {
-		printf("%d Right Eh null\n",x->key);
-	} else {
-		printf("%d Right %d\n",x->key, x->children[1 - x->bit]->key);
-	}
-}
+	Node* split_roots;
 
-void quemEhEsquerdo(Node x) {
-	if (x == NULL) return;
-	if(x->children[x->bit] == NULL) {
-		printf("%d Left Eh null\n",x->key);
-	} else {
-		printf("%d Left %d\n",x->key, x->children[x->bit]->key);
-	}
-}
+	// para garantir que o bit dele vá para o filho, se for 1
+	pushBitDown(v);
 
-void quemEhPai(Node x) {
-	if (x == NULL) return;
-	if(x->parent == NULL) {
-		printf("%d parent Eh null\n",x->key);
-	} else {
-		printf("%d parent %d\n",x->key, x->parent->key);
-	}
-}
-
-void quemEhPathParent(Node x) {
-	if (x == NULL) return;
-	if(x->pathParent == NULL) {
-		printf("%d pathParent Eh null\n",x->key);
-	} else {
-		printf("%d pathParent %d\n",x->key, x->pathParent->key);
-	}
-}
-
-// Sem a opção de imprimir em um arquivo
-void analisaNode(Node x) {
-	if (x == NULL) return;
-
-	printf("Sobre o %d\n", x->key);
-	quemEhDireito(x);
-	quemEhEsquerdo(x);
-	quemEhPai(x);
-	quemEhPathParent(x);
-	printf("\n");
-	if (x->parent == NULL) {
-		printSPLAY(x, 1);
-		printf("\n");
-	}
-}
-
-
-void analisa_Node_E_Imprime_em_arquivo(Node x, FILE *printFile) {
-	if (x == NULL) return;
-
-	printf("Sobre o %d\n", x->key);
-	quemEhDireito(x);
-	quemEhEsquerdo(x);
-	quemEhPai(x);
-	quemEhPathParent(x);
-	printf("\n");
-	if (x->parent == NULL) {
-		printSPLAY(x, 1);
-		printf("\n");
-	}
-}
-
-void analisaSplay(Node x) {
-	if (x == NULL) return;
-	if (x->parent != NULL) x = findRoot(x);
-	analisaPreOrdemSplay(x);
-}
-// função auxiliar de 'analisaSplay', para analisar em pre-ordem a splay 
-static void analisaPreOrdemSplay(Node x) {
-	if (x == NULL) return;
-	analisaNode(x);
-	analisaPreOrdemSplay(x->children[1-x->bit]);
-	analisaPreOrdemSplay(x->children[x->bit]);
+	//realizo o split no pai do v, porque v->parent é menos profundo do que v, portanto v cai para o lado greater
+	split_roots = split(maximum(v->children[0]));
 }

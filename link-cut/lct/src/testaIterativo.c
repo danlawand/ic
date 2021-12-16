@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lct.h"
+#include <analisaLct.h>
 
 static void *mallocSafe(size_t);
 #define TAMANHO_MAX 200
@@ -26,7 +27,7 @@ int main(int argc, char * argv[]) {
 	int n_vertices;
 	
 	//variáveis auxiliares
-	int indice[2], tag_link = 2, i = 1;
+	int indice[2], tag_link = 2, tag_cut = 0, i = 1;
 	indice[0] = 0;
 	indice[1] = 0;
 	
@@ -63,11 +64,13 @@ int main(int argc, char * argv[]) {
     		if (tag_link == 1) {
     			//realizaremos o link do nó com índice indice[0] + nó com índice indice[1]
     			printf("----- Link dos Vertices %d e %d -----\n",indice[tag_link-1], indice[tag_link]);
+
+    			//garante que nodes[indice[0]] é a raiz
     			if(findRoot(nodes[indice[tag_link-1]]) != nodes[indice[tag_link-1]]) {
     				evert(nodes[indice[tag_link-1]]);
     			}
 
-	    		//Invariante: o indice[1] sempre será a raiz da árvore dele
+	    		//Invariante: o indice[0] sempre será a raiz da árvore dele
     			link(nodes[indice[tag_link-1]], nodes[indice[tag_link]]);
 
     			analisaSplay(nodes[indice[tag_link-1]]);
@@ -77,9 +80,40 @@ int main(int argc, char * argv[]) {
     		}
     		tag_link++;
     	}
+
+    	//tag_cut indica se haverá cut ou não
+    	if (tag_cut == 1) {
+    		//Identifico o índice do vértice que realizaremos a operação, e atribuo no indice[0]
+    		indice[0] = atoi(buffer);
+    		
+    		printf("----- Cut do Vertice %d -----\n",indice[0]);
+
+			//garante que nodes[indice[0]] não é a raiz 
+			if(findRoot(nodes[indice[0]]) != nodes[indice[0]]) {
+
+				//Invariante: o indice[0] nunca é a raiz da árvore dele
+    			cut(nodes[indice[0]]);
+			}
+
+			analisaSplay(nodes[indice[0]]);
+			printf("\n");
+			printSPLAY(nodes[indice[0]], 1);
+			printf("\n");
+
+    		tag_cut++;
+    	}
+
+
     	if (buffer[0] == '+') {
     		tag_link = 0;
+    		tag_cut = 0;
     	}
+
+    	if (buffer[0] == '-') {
+    		tag_cut = 1;
+    		tag_link = 2;
+    	}
+
     }
 
 	printf("\n------------- Print Final ---------------- \n\n");

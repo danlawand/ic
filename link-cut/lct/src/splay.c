@@ -22,7 +22,7 @@ static void  rotate(Node);
 
 static Node  join(Node, Node);
 
-// static Node  maximum(Node); 
+// static Node  maximum(Node);
 
 
 
@@ -40,14 +40,14 @@ void splay (Node x) {
 		else if (( p == p->parent->children[0] && x == p->children[p->bit] ) ||
 		( p == p->parent->children[1] && x == p->children[1 - p->bit] )) {
 			rotate(p);
-			rotate(x);			
+			rotate(x);
 		}
 
 		//If It's the left child and it's parent is the right child
-		//If It's the right child and it's parent is the left child		
+		//If It's the right child and it's parent is the left child
 		else {
 			rotate(x);
-			rotate(x);	
+			rotate(x);
 		}
 	}
 	// x->parent == NULL, and only the root parent is NULL

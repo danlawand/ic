@@ -8,8 +8,8 @@ void lctInit();
 //Operação:  cria uma nova árvore, enraizada em um novo nó, e a devolve (devolve o endereço do novo nó, que é a raiz da árvore);
 Node maketree();
 
-//pré-condição: v e w estão em árvores distintas e v é a raiz da sua árvore;
-//Operação: junta as árvores de v e w, acrescentando a aresta v->w (w filho de v).
+//pré-condição: v e w estão em árvores distintas e v é a raiz da sua árvore (da represented tree, não necessariamente da Splay Tree);
+//Operação: junta as árvores de v e w, acrescentando a aresta v->w, fazendo w parent de v (ou v filho de w).
 //link(v, w)
 void link(Node, Node);
 

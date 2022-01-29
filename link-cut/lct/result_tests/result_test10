@@ -1,0 +1,30 @@
+Sobre o 0
+0 Right Eh null
+0 Left Eh null
+0 parent Eh null
+0 pathParent Eh null
+
+Sobre o 1
+1 Right 4
+1 Left Eh null
+1 parent Eh null
+1 pathParent Eh null
+
+Sobre o 2
+2 Right 3
+2 Left Eh null
+2 parent 4
+2 pathParent Eh null
+
+Sobre o 3
+3 Right Eh null
+3 Left Eh null
+3 parent 2
+3 pathParent Eh null
+
+Sobre o 4
+4 Right Eh null
+4 Left 2
+4 parent 1
+4 pathParent Eh null
+

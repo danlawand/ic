@@ -9,12 +9,12 @@ RM := rm
 
 VPATH:= ./src/ ./obj/ ./include/
 
-# Path for .c , .h and .o Files 
+# Path for .c , .h and .o Files
 SRC_PATH := ./src/
 OBJ_PATH := ./obj/
 INC_PATH := -I ./include
 
-# Executable Name 
+# Executable Name
 TARGET1 := iterative_exe
 # TARGET2 := automatic_exe
 
@@ -46,7 +46,7 @@ $(TARGET1):      $(OBJ1)
 
 
 # Clean all the object files and the binary
-clean:   
+clean:
 	@echo "[Cleaning]"
 	@$(RM) -rfv $(OBJ_PATH)*
 	@$(RM) -rfv $(TARGET1)

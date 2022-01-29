@@ -111,7 +111,7 @@ void pushBitDown(Node x) {
 	if (x->bit == 1) {
 		swapChildren(x);
 		x->bit = 0;
-	
+
 		Node cLeft = x->children[0];
 		if (cLeft != NULL) {
 			cLeft->bit = 1 - cLeft->bit;
@@ -130,7 +130,7 @@ static void rotate(Node x) {
 	Node p = x->parent;
 	Node g = p->parent;
 	if (p->children[0] == x) {
-		
+
 		p->children[0] = x->children[1];
 		if (x->children[1] != NULL) x->children[1]->parent = p;
 		x->children[1] = p;
@@ -180,7 +180,7 @@ Node* split(Node x) {
 	if (T != NULL) {
 		T->parent = NULL;
 		T->bit ^= x->bit;
-	}	
+	}
 	x->children[1 - x->bit] = NULL;
 	S = x;
 
@@ -199,7 +199,7 @@ void printSPLAY(Node x, int i) {
 		if (child != NULL) child->bit ^= x->bit;
 		child  = x->children[1];
 		if (child != NULL) child->bit ^= x->bit;
-		
+
 		printSPLAY(x->children[1 - x->bit], i+1);
 		int bparent = 0;
 		if (x->parent != NULL) {

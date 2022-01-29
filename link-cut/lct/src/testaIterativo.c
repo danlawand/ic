@@ -9,14 +9,18 @@ static void *mallocSafe(size_t);
 
 
 int main(int argc, char * argv[]) {
+	if (argc < 2) {
+		printf("- To run this file you need to execute as following:\n");
+		printf("-    ./iterative_exe <test_name> <test_number> [flag_for_verbose_output]\n");
+		printf("-    verbose flag is 'v'\n\n");
+		exit(EXIT_FAILURE);
+	}
 	if (argc < 3) {
 		printf("It needs the file's name and the test number.\n");
 		exit(EXIT_FAILURE);
 	}
-	if (argc < 2) {
-		printf("It needs the file's name.\n");
-		exit(EXIT_FAILURE);
-	}
+	char flag_output = 'q';
+	if (argc == 4) flag_output = 'v';
 
 	FILE *arquivo_entrada;
 	FILE * arquivo_de_saida;
@@ -31,7 +35,7 @@ int main(int argc, char * argv[]) {
 	}
 
 	// Operacao para gerar o nome do arquivo do resultado do i-ésimo teste
-	char output_file_name[] = "result_tests/result_test";
+	char output_file_name[] = "testes/result_tests/result_test";
     strcat(output_file_name,argv[2]);
     printf("\n Result test file name: %s\n", output_file_name);
 
@@ -75,8 +79,7 @@ int main(int argc, char * argv[]) {
     		for (int i = 0; i < n_vertices; ++i) {
 				nodes[i] = maketree();
 			}
-
-    		printf("%d Vertices Criados\n",n_vertices);
+			if (flag_output == 'v') printf("%d Vertices Criados\n",n_vertices);
     	}
     	i = 0;
     	//Vou pegar de dois em dois vértices para fazer a operação.
@@ -88,7 +91,7 @@ int main(int argc, char * argv[]) {
     		//Quando identificarmos o segundo nó, façamos:
     		if (tag_link == 1) {
     			//realizaremos o link do nó com índice indice[0] + nó com índice indice[1]
-    			printf("----- Link dos Vertices %d e %d -----\n",indice[tag_link-1], indice[tag_link]);
+    			if (flag_output == 'v') printf("----- Link dos Vertices %d e %d -----\n",indice[tag_link-1], indice[tag_link]);
 
     			//garante que nodes[indice[0]] é a raiz
     			if(findRoot(nodes[indice[tag_link-1]]) != nodes[indice[tag_link-1]]) {
@@ -98,10 +101,12 @@ int main(int argc, char * argv[]) {
 	    		//Invariante: o indice[0] sempre será a raiz da árvore dele
     			link(nodes[indice[tag_link-1]], nodes[indice[tag_link]]);
 
-    			analisaSplay(nodes[indice[tag_link-1]]);
-				printf("\n");
-				printSPLAY(nodes[indice[tag_link-1]], 1);
-				printf("\n");
+				if (flag_output == 'v') {
+					analisaSplay(nodes[indice[tag_link-1]]);
+					printf("\n");
+					printSPLAY(nodes[indice[tag_link-1]], 1);
+					printf("\n");
+				}
     		}
     		tag_link++;
     	}
@@ -111,7 +116,7 @@ int main(int argc, char * argv[]) {
     		//Identifico o índice do vértice que realizaremos a operação, e atribuo no indice[0]
     		indice[0] = atoi(buffer);
 
-    		printf("----- Cut do Vertice %d -----\n",indice[0]);
+    		if (flag_output == 'v') printf("----- Cut do Vertice %d -----\n",indice[0]);
 
 			//garante que nodes[indice[0]] não é a raiz
 			if(findRoot(nodes[indice[0]]) != nodes[indice[0]]) {
@@ -119,11 +124,12 @@ int main(int argc, char * argv[]) {
 				//Invariante: o indice[0] nunca é a raiz da árvore dele
     			cut(nodes[indice[0]]);
 			}
-
-			analisaSplay(nodes[indice[0]]);
-			printf("\n");
-			printSPLAY(nodes[indice[0]], 1);
-			printf("\n");
+			if (flag_output == 'v') {
+				analisaSplay(nodes[indice[0]]);
+				printf("\n");
+				printSPLAY(nodes[indice[0]], 1);
+				printf("\n");
+			}
 
     		tag_cut++;
     	}
@@ -141,14 +147,15 @@ int main(int argc, char * argv[]) {
 
     }
 
-	printf("\n------------- Print Final ---------------- \n\n");
+	if (flag_output == 'v') printf("\n------------- Print Final for Test %s ------------- \n\n",argv[2]);
+	else printf("\n--------------------- Test %s --------------------- \n\n",argv[2]);
 	for (int i = 0; i < n_vertices; ++i)
 	{
 		//Analiso cada nó, para ver como foi seu comportamento.
 		analisaNode(nodes[i], arquivo_de_saida);
 	}
-	fclose(arquivo_de_saida);
 
+	fclose(arquivo_de_saida);
 	fclose (arquivo_entrada);
 }
 

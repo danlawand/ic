@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
 	//buffer para o arquivo de entrada
 	char buffer[TAMANHO_MAX];
 
-	// identifica quantos nós teremos
+	// variavel que armazena quantos nós teremos
 	int n_vertices;
 
 	//variáveis auxiliares

@@ -76,7 +76,16 @@ void quemEhPathParent(Node x, FILE* fp) {
 	}
 }
 
-// Sem a opção de imprimir em um arquivo
+void qualBit(Node x, FILE *fp) {
+	if (x == NULL) return;
+
+	if (fp != NULL) {
+		fprintf(fp, "%d bit %d\n",x->key, x->bit);
+	}
+	printf("%d bit %d\n",x->key, x->bit);
+}
+
+// Descreve o nó, com a opção de imprimir em um arquivo
 void analisaNode(Node x, FILE* fp) {
 	if (x == NULL) return;
 
@@ -88,25 +97,11 @@ void analisaNode(Node x, FILE* fp) {
 	quemEhEsquerdo(x, fp);
 	quemEhPai(x, fp);
 	quemEhPathParent(x, fp);
+	qualBit(x, fp);
+
 	if (fp != NULL) {
 		fprintf(fp, "\n");
 	}
-	printf("\n");
-	if (x->parent == NULL) {
-		printSPLAY(x, 1);
-		printf("\n");
-	}
-}
-
-// Com a opção de imprimir em um arquivo
-void analisa_Node_E_Imprime_em_arquivo(Node x, FILE* *printFile) {
-	if (x == NULL) return;
-
-	printf("Sobre o %d\n", x->key);
-	quemEhDireito(x, NULL);
-	quemEhEsquerdo(x, NULL);
-	quemEhPai(x, NULL);
-	quemEhPathParent(x, NULL);
 	printf("\n");
 	if (x->parent == NULL) {
 		printSPLAY(x, 1);

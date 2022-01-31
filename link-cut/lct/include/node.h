@@ -8,9 +8,9 @@ struct node {
 	Key key;	/*key*/
 	Value val;	/*associated value*/
 	Node children[2]; /*link to subtrees*/
-	// Node left;	
+	// Node left;
 	// Node right;
-	Node parent;	
+	Node parent;
 	Node pathParent;
 	int bit;
 	int N;		/* # nodes in subtree rooted here*/

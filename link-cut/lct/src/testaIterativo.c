@@ -8,6 +8,8 @@ static void *mallocSafe(size_t);
 #define TAMANHO_MAX 200
 
 
+// void leEntradaEPoeNoBuffer()
+
 int main(int argc, char * argv[]) {
 	if (argc < 2) {
 		printf("- To run this file you need to execute as following:\n");
@@ -52,6 +54,7 @@ int main(int argc, char * argv[]) {
 	//buffer para o arquivo de entrada
 	char buffer[TAMANHO_MAX];
 
+
 	// variavel que armazena quantos nós teremos
 	int n_vertices;
 
@@ -65,12 +68,11 @@ int main(int argc, char * argv[]) {
 
 	Node *nodes;
 
-
 	/* le do arquivo */
     while(fscanf(arquivo_entrada, "%s", buffer) && !feof(arquivo_entrada)){
 
     	//Se for a primeira iteração, pegaremos a primeira linha do arquivo que é a quantidade de nós
-    	if (i){
+    	if (i == 1){
     		n_vertices = atoi(buffer);
 
     		nodes = mallocSafe(n_vertices*sizeof(Node));
@@ -82,6 +84,8 @@ int main(int argc, char * argv[]) {
 			if (flag_output == 'v') printf("%d Vertices Criados\n",n_vertices);
     	}
     	i = 0;
+
+
     	//Vou pegar de dois em dois vértices para fazer a operação.
     	//tag_link indica qual vértice eu estou me referindo, se for zero equivale ao primeiro, se for 1 ao segundo
     	if (tag_link < 2) {
@@ -91,6 +95,8 @@ int main(int argc, char * argv[]) {
     		//Quando identificarmos o segundo nó, façamos:
     		if (tag_link == 1) {
     			//realizaremos o link do nó com índice indice[0] + nó com índice indice[1]
+
+				// Print Verboso ou não
     			if (flag_output == 'v') printf("----- Link dos Vertices %d e %d -----\n",indice[tag_link-1], indice[tag_link]);
 
     			//garante que nodes[indice[0]] é a raiz
@@ -101,6 +107,7 @@ int main(int argc, char * argv[]) {
 	    		//Invariante: o indice[0] sempre será a raiz da árvore dele
     			link(nodes[indice[tag_link-1]], nodes[indice[tag_link]]);
 
+				// Print Verboso ou não
 				if (flag_output == 'v') {
 					analisaSplay(nodes[indice[tag_link-1]]);
 					printf("\n");
@@ -116,6 +123,7 @@ int main(int argc, char * argv[]) {
     		//Identifico o índice do vértice que realizaremos a operação, e atribuo no indice[0]
     		indice[0] = atoi(buffer);
 
+			// Print verbose ou não
     		if (flag_output == 'v') printf("----- Cut do Vertice %d -----\n",indice[0]);
 
 			//garante que nodes[indice[0]] não é a raiz
@@ -124,13 +132,13 @@ int main(int argc, char * argv[]) {
 				//Invariante: o indice[0] nunca é a raiz da árvore dele
     			cut(nodes[indice[0]]);
 			}
+			// Print Verboso ou não
 			if (flag_output == 'v') {
 				analisaSplay(nodes[indice[0]]);
 				printf("\n");
 				printSPLAY(nodes[indice[0]], 1);
 				printf("\n");
 			}
-
     		tag_cut++;
     	}
 

@@ -14,6 +14,7 @@ void lctInit() {
 }
 
 Node maketree() {
+	if (chave == 'Z') chave = 'a';
 	return newNode(chave++, valor++, NULL, NULL, NULL, NULL, 0, 0);
 }
 
@@ -75,7 +76,7 @@ void access(Node v) {
 
 
 // v e w estão em árvores distintas e v é a raiz da sua árvore;
-// junta as árvores de v e w, acrescentando a aresta v->w, fazendo w parent de v (ou v filho de w).
+// junta as árvores de v e w, acrescentando a aresta v->w, fazendo w pai de v (ou v filho de w).
 void link(Node v, Node w) {
 	access(v);
 	access(w);
@@ -101,20 +102,16 @@ Node findRoot(Node v) {
 	return r;
 }
 
-//pré-condição: v não é uma raiz de árvore; remove a aresta v->parent(v). 
+//pré-condição: v não é uma raiz de árvore; remove a aresta v->parent(v).
 void cut(Node v) {
 	if (findRoot(v) == v) return;
 
-
-
 	//acesso v, e v se torna raiz na sua splay tree
 	access(v);
-
-	Node* split_roots;
 
 	// para garantir que o bit dele vá para o filho, se for 1
 	pushBitDown(v);
 
 	//realizo o split no pai do v, porque v->parent é menos profundo do que v, portanto v cai para o lado greater
-	split_roots = split(maximum(v->children[0]));
+	split(maximum(v->children[0]));
 }

@@ -8,8 +8,6 @@ static int   bit = 1;
 static Node  root; 				/*root of Splay Tree*/
 static Node  split_roots[2];
 
-static int compareKeys(Key, Key);
-
 static Node sibling(Node);
 
 static void swapChildren(Node);
@@ -20,9 +18,6 @@ static void pushBitUp(Node);
 
 static void  rotate(Node);
 
-static Node  join(Node, Node);
-
-// static Node  maximum(Node);
 
 
 
@@ -59,11 +54,6 @@ void revertSPLAY() {
 	root->bit = 1 - root->bit;
 }
 
-static int compareKeys(Key k1, Key k2) {
-	return bit * (k1 - k2);
-}
-
-
 int isRoot(Node x) {
 	if (x->parent == NULL) return 1;
 	return 0;
@@ -74,6 +64,7 @@ Node minimum(Node x) {
 	if (x->children[x->bit] == NULL) return x;
 	return minimum(x->children[x->bit]);
 }
+
 
 /************************   AUXILIARY FUNCTIONS ************************/
 
@@ -149,21 +140,6 @@ static void rotate(Node x) {
 		if (p == g->children[0]) g->children[0] = x;
 		else g->children[1] = x;
 	}
-}
-
-//All the items in S are smaller than the items in T
-static Node join(Node S, Node T) {
-	if (S == NULL) return T;
-	if (T == NULL) return S;
-
-	Node x = maximum(S);
-	splay(x);
-
-	x->children[1] = T;
-	T->parent = x;
-
-	//x is the root of the joining tree
-	return x;
 }
 
 Node maximum(Node x) {

@@ -26,7 +26,7 @@ Node findRoot(Node);
 void evert(Node);
 
 
-//pré-condição: v não é uma raiz de árvore; remove a aresta v->parent(v). 
+//pré-condição: v não é uma raiz de árvore; remove a aresta v->parent(v).
 //cut(v)
 void cut(Node);
 

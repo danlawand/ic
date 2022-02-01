@@ -585,6 +585,18 @@ Sobre o 10
 10:0
 
 
+---------------------- TESTE 10 ----------------------
+11 (Não usei o nó zero)
++ 5 1
++ 10 7
++ 7 6
++ 8 7
++ 9 8
++ 6 1
++ 2 1
++ 3 2
++ 4 3
+
 TO-DO
 - Trocar nome de vértice para letra
 - Incluir o teste que tem na wiki (tamanho grd)

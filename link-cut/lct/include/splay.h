@@ -11,5 +11,6 @@ void printSPLAY(Node, int);
 Node minimum(Node);
 Node* split(Node);
 Node maximum(Node);
+Node minimum(Node);
 void pushBitDown(Node);
 #endif

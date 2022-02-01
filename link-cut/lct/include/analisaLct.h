@@ -10,6 +10,7 @@ void quemEhEsquerdo(Node, FILE*);
 void quemEhPai(Node, FILE*);
 void quemEhPathParent(Node, FILE*);
 void qualBit(Node, FILE*);
+void quemEhMinimumNaArvore(Node, FILE*);
 
 // Analisa a splay do node x, buscando sua raiz e imprimindo toda a splay
 void analisaSplay(Node);

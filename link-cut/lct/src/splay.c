@@ -14,8 +14,6 @@ static void swapChildren(Node);
 
 static void pushBitUp(Node);
 
-// static void pushBitDown(Node);
-
 static void  rotate(Node);
 
 
@@ -60,7 +58,6 @@ int isRoot(Node x) {
 }
 
 Node minimum(Node x) {
-	// pushBitDown(x);
 	if (x->children[x->bit] == NULL) return x;
 	return minimum(x->children[x->bit]);
 }

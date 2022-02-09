@@ -1,7 +1,8 @@
 #!/bin/bash
 
+
 function whichDifference() {
-    for i in {1..9}
+    for i in {1..10}
     do
         echo "Comparining expected_test${i} with result_test${i}"
         diff -u ../expected_results/expected_test${i} ../result_tests/result_test${i} > difference${i}
@@ -11,7 +12,7 @@ function whichDifference() {
 
 
 function failedOrSucessed() {
-    for i in {1..9}
+    for i in {1..10}
     do
         if cmp --silent -- ../expected_results/expected_test${i} ../result_tests/result_test${i}; then
         echo "Test${i} Sucessed!"

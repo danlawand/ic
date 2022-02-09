@@ -145,12 +145,12 @@ void analisaNode(Node x, FILE* fp) {
 	if (fp != NULL) {
 		fprintf(fp, "Sobre o %d\n", x->key);
 	}
-	quemEhDireito(x, fp);
-	quemEhEsquerdo(x, fp);
-	quemEhPai(x, fp);
+	// quemEhDireito(x, fp);
+	// quemEhEsquerdo(x, fp);
+	// quemEhPai(x, fp);
 	quemEhPathParent(x, fp);
-	qualBit(x, fp);
-	quemEhMinimumNaArvore(x, fp);
+	// qualBit(x, fp);
+	// quemEhMinimumNaArvore(x, fp);
 	qualEhOPreferredPath(x, fp);
 
 	if (fp != NULL) {

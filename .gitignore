@@ -1,2 +1,6 @@
 .vscode
 .metals
+zoei*
+tstex_modules
+live.main.*
+modelo-latex-master.zip

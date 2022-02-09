@@ -97,7 +97,6 @@ static Node splay (Node h, Key key) {
 	if (cmp1 < 0) {
 		/*key not in tree*/
 		if (h->left == NULL) return h;
-	
 		int cmp2 = compareKeys(key, h->left->key);
 		if (cmp2 < 0) {
 			h->left->left = splay(h->left->left, key);
@@ -116,7 +115,6 @@ static Node splay (Node h, Key key) {
 	} else if (cmp1 > 0) {
 		/*Key not in tree*/
 		if (h->right == NULL) return h;
-		
 		int cmp2 = compareKeys(key, h->right->key);
 		if (cmp2 < 0) {
 			h->right->left = splay(h->right->left, key);

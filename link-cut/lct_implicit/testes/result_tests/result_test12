@@ -1,0 +1,21 @@
+Sobre o 0
+0->Right: Eh null
+0->Left: Eh null
+0->parent: Eh null
+0->pathParent: Eh null
+0->bit: 0
+
+Sobre o 1
+1->Right: Eh null
+1->Left: Eh null
+1->parent: Eh null
+1->pathParent: Eh null
+1->bit: 0
+
+Sobre o 2
+2->Right: Eh null
+2->Left: Eh null
+2->parent: Eh null
+2->pathParent: Eh null
+2->bit: 0
+

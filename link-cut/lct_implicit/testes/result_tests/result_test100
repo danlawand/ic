@@ -6,22 +6,22 @@ Preferred Path:
 Sobre o 1
 1->pathParent: Eh null
 Preferred Path: 
-2 -> 3 -> 4 -> 1 -> 
+1 -> 2 -> 3 -> 4 -> 
 
 Sobre o 2
 2->pathParent: Eh null
 Preferred Path: 
-2 -> 3 -> 4 -> 1 -> 
+1 -> 2 -> 3 -> 4 -> 
 
 Sobre o 3
 3->pathParent: Eh null
 Preferred Path: 
-2 -> 3 -> 4 -> 1 -> 
+1 -> 2 -> 3 -> 4 -> 
 
 Sobre o 4
 4->pathParent: Eh null
 Preferred Path: 
-2 -> 3 -> 4 -> 1 -> 
+1 -> 2 -> 3 -> 4 -> 
 
 Sobre o 5
 5->pathParent: 1
@@ -34,19 +34,19 @@ Preferred Path:
 6 -> 
 
 Sobre o 7
-7->pathParent: 6
+7->pathParent: Eh null
 Preferred Path: 
-7 -> 9 -> 8 -> 
+7 -> 8 -> 9 -> 
 
 Sobre o 8
 8->pathParent: Eh null
 Preferred Path: 
-7 -> 9 -> 8 -> 
+7 -> 8 -> 9 -> 
 
 Sobre o 9
-9->pathParent: Eh null
+9->pathParent: 6
 Preferred Path: 
-7 -> 9 -> 8 -> 
+7 -> 8 -> 9 -> 
 
 Sobre o 10
 10->pathParent: 7

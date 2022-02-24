@@ -92,7 +92,7 @@ void qualBit(Node x, FILE *fp) {
 void quemEhMinimumNaArvore(Node x, FILE* fp) {
 	if (x == NULL) return;
 
-	Node k = minimum(encontraRaiz(x));
+	Node k = minimumSemMudanca(encontraRaiz(x));
 	if (fp != NULL) {
 		if(k != NULL) {
 			fprintf(fp, "%d->minimo: %d\n",x->val, k->val);
@@ -165,7 +165,7 @@ void analisaNode(Node x, FILE* fp) {
 
 void analisaSplay(Node x) {
 	if (x == NULL) return;
-	if (x->parent != NULL) x = findRoot(x);
+	if (x->parent != NULL) x = findRootSemAccess(x);
 	analisaPreOrdemSplay(x);
 }
 

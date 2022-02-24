@@ -4,6 +4,7 @@
 
 // children[1] == right
 // children[0] == left
+static int valor;
 static int   bit = 1;
 static Node  root; 				/*root of Splay Tree*/
 static Node  split_roots[2];
@@ -14,9 +15,56 @@ static void swapChildren(Node);
 
 static void pushBitUp(Node);
 
+// static void pushBitDown(Node);
+
 static void  rotate(Node);
 
+static Node maximum(Node);
 
+static Node minimum(Node);
+
+void splayInit() {
+	valor = 0;
+}
+
+Node makeSplay() {
+	// if (chave == 'Z') chave = 'a';
+	return newNode(valor++, NULL, NULL, NULL, NULL, 0, 0);
+}
+
+void reflectBit(Node v) {
+	Node w;
+	if (v->children[1] != NULL)	w = v->children[1];
+	v->bit = 1 - v->bit;
+	if (v->children[1] != NULL) reflectBit(w);
+}
+
+void join(Node v, Node w) {
+	w->children[1] = v;
+	v->parent = w;
+}
+
+
+Node* split(Node x) {
+	Node S, T;
+
+	// Preciso desse splay aqui, para que x seja a raiz e tenha filhos. Senão, caso x seja uma folha, de nada adiantará essa operação.
+
+	T = x->children[1 - x->bit];
+	if (T != NULL) {
+		T->parent = NULL;
+
+		// Pq inverto os bits?
+		T->bit ^= x->bit;
+	}
+	x->children[1 - x->bit] = NULL;
+	S = x;
+
+	split_roots[0] = S;
+	split_roots[1] = T;
+
+	return split_roots;
+}
 
 
 void splay (Node x) {
@@ -43,32 +91,89 @@ void splay (Node x) {
 			rotate(x);
 		}
 	}
+	pushBitDown(x);
 	// x->parent == NULL, and only the root parent is NULL
 	root = x;
 }
+
+
+static void rotate(Node x) {
+	// inverto bit do pai e do irmão
+	// E inverto quem é o filho [0] e o filho [1]
+	if (x->bit == 1) pushBitUp(x);
+
+	// pai
+	Node p = x->parent;
+
+	// Avô
+	Node g = p->parent;
+
+	//rightRotate
+	// x filho esquerdo se torna o pai de seu pai
+	if (p->children[0] == x) {
+
+		//
+		p->children[0] = x->children[1];
+		if (x->children[1] != NULL) x->children[1]->parent = p;
+		x->children[1] = p;
+	}
+	//leftRotate
+	// x filho direito se torna o pai de seu pai
+	else {
+		p->children[1] = x->children[0];
+		if (x->children[0] != NULL) x->children[0]->parent = p;
+		x->children[0] = p;
+	}
+	x->bit = p->bit;
+	p->bit = 0;
+
+	p->parent = x;
+	x->parent = g;
+	if (g != NULL) {
+		if (p == g->children[0]) g->children[0] = x;
+		else g->children[1] = x;
+	}
+}
+
+// Operação dumb Serve apenas para o print
+Node minimumSemMudanca(Node x) {
+	if (x->children[x->bit] == NULL) return x;
+	return minimumSemMudanca(x->children[x->bit]);
+}
+
+Node casquinhaMin(Node x) {
+	Node m = minimum(x);
+	splay(m);
+	return m;
+}
+
+
 // recebe uma raiz e devolve o mínimo da árvore toda
-Node minimum(Node x) {
+static Node minimum(Node x) {
 	// Será que não deveria acumular o bit quando faz o mínimo.
+	pushBitDown(x);
 	if (x->children[x->bit] == NULL) return x;
 	return minimum(x->children[x->bit]);
 }
 
 
+
+Node casquinhaMax(Node x) {
+	Node m = maximum(x);
+	splay(m);
+	return m;
+}
+
+// recebe uma raiz e devolve o máximo da árvore toda
+static Node maximum(Node x) {
+	// TESTAR SE PRECISA DO pushBitDown aqui, ou não
+	pushBitDown(x);
+	if (x->children[1-x->bit] == NULL) return x;
+	return maximum(x->children[1-x->bit]);
+}
+
+
 /************************   AUXILIARY FUNCTIONS ************************/
-
-// devolve o irmão de x
-static Node sibling(Node x) {
-	Node p = x->parent;
-	if (p->children[0] == x) return p->children[1];
-	else return p->children[0];
-}
-
-// inverte os filhos
-static void swapChildren(Node p) {
-	Node aux = p->children[0];
-	p->children[0] = p->children[1];
-	p->children[1] = aux;
-}
 
 // A ideia é "jogar" o bit de x (que é 1, no caso do rotate) para o pai 'p', por isso "p->bit = 1 - p->bit;"
 
@@ -109,87 +214,20 @@ void pushBitDown(Node x) {
 	}
 }
 
-static void rotate(Node x) {
-	// inverto bit do pai e do irmão
-	// E inverto quem é o filho [0] e o filho [1]
-	if (x->bit == 1) pushBitUp(x);
-
-	// pai
+// devolve o irmão de x
+static Node sibling(Node x) {
 	Node p = x->parent;
-
-	// Avô
-	Node g = p->parent;
-
-	//rightRotate
-	// x filho esquerdo se torna o pai de seu pai
-	if (p->children[0] == x) {
-
-		//
-		p->children[0] = x->children[1];
-		if (x->children[1] != NULL) x->children[1]->parent = p;
-		x->children[1] = p;
-	}
-	//leftRotate
-	// x filho direito se torna o pai de seu pai
-	else {
-		p->children[1] = x->children[0];
-		if (x->children[0] != NULL) x->children[0]->parent = p;
-		x->children[0] = p;
-	}
-	x->bit = p->bit;
-	p->bit = 0;
-
-	p->parent = x;
-	x->parent = g;
-	if (g != NULL) {
-		if (p == g->children[0]) g->children[0] = x;
-		else g->children[1] = x;
-	}
+	if (p->children[0] == x) return p->children[1];
+	else return p->children[0];
 }
 
-
-// SERÁ QUE O MÁXIMO NÃO É ASSIM?
-// recebe uma raiz e devolve o máximo da árvore toda
-// Node maximum(Node x) {
-// 	// TESTAR SE PRECISA DO pushBitDown aqui, ou não
-// 	pushBitDown(x);
-// 	if (x->children[1-x->bit] == NULL) return x;
-// 	return maximum(x->children[1-x->bit]);
-// }
-
-
-Node casquinhaMax(Node x) {
-	maximum(x);
-	splay(x);
+// inverte os filhos
+static void swapChildren(Node p) {
+	Node aux = p->children[0];
+	p->children[0] = p->children[1];
+	p->children[1] = aux;
 }
 
-// recebe uma raiz e devolve o máximo da árvore toda
-Node maximum(Node x) {
-	// TESTAR SE PRECISA DO pushBitDown aqui, ou não
-	pushBitDown(x);
-	if (x->children[1] == NULL) return x;
-	return maximum(x->children[1]);
-}
-
-Node* split(Node x) {
-	Node S, T;
-	splay(x);
-
-	T = x->children[1 - x->bit];
-	if (T != NULL) {
-		T->parent = NULL;
-
-		// Pq inverto os bits?
-		T->bit ^= x->bit;
-	}
-	x->children[1 - x->bit] = NULL;
-	S = x;
-
-	split_roots[0] = S;
-	split_roots[1] = T;
-
-	return split_roots;
-}
 
 /************************   PRINT FUNCTIONS ************************/
 
@@ -213,6 +251,5 @@ void printSPLAY(Node x, int i) {
 		if (child != NULL) child->bit ^= x->bit;
 		child  = x->children[1];
 		if (child != NULL) child->bit ^= x->bit;
-
 	}
 }

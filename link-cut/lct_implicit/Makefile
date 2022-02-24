@@ -50,4 +50,4 @@ clean:
 	@echo "[Cleaning]"
 	@$(RM) -rfv $(OBJ_PATH)*
 	@$(RM) -rfv $(TARGET1)
-	@$(RM) -rfv $(TARGET2)
+#	@$(RM) -rfv $(TARGET2)

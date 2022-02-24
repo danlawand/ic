@@ -8,12 +8,10 @@ static void *mallocSafe(size_t);
 #define TAMANHO_MAX 200
 
 
-// void leEntradaEPoeNoBuffer()
-
 int main(int argc, char * argv[]) {
 	if (argc < 2) {
 		printf("- To run this file you need to execute as following:\n");
-		printf("-    ./iterative_exe <test_name> <test_number> [flag_for_verbose_output]\n");
+		printf("-    ./exe <test_name> <test_number> [flag_for_verbose_output]\n");
 		printf("-    verbose flag is 'v'\n\n");
 		exit(EXIT_FAILURE);
 	}
@@ -94,17 +92,10 @@ int main(int argc, char * argv[]) {
 
     		//Quando identificarmos o segundo nó, façamos:
     		if (tag_link == 1) {
-    			//realizaremos o link do nó com índice indice[0] + nó com índice indice[1]
 
 				// Print Verboso ou não
     			if (flag_output == 'v') printf("----- Link dos Vertices %d e %d -----\n",indice[tag_link-1], indice[tag_link]);
 
-    			//garante que nodes[indice[0]] é a raiz
-    			if(findRoot(nodes[indice[tag_link-1]]) != nodes[indice[tag_link-1]]) {
-    				evert(nodes[indice[tag_link-1]]);
-    			}
-
-	    		//Invariante: o indice[0] sempre será a raiz da árvore dele
     			link(nodes[indice[tag_link-1]], nodes[indice[tag_link]]);
 
 				// Print Verboso ou não
@@ -126,12 +117,9 @@ int main(int argc, char * argv[]) {
 			// Print verbose ou não
     		if (flag_output == 'v') printf("----- Cut do Vertice %d -----\n",indice[0]);
 
-			//garante que nodes[indice[0]] não é a raiz
-			if(findRoot(nodes[indice[0]]) != nodes[indice[0]]) {
+			// Invariante: Cut não é usado com a raiz da LCT
+			cut(nodes[indice[0]]);
 
-				//Invariante: o indice[0] nunca é a raiz da árvore dele
-    			cut(nodes[indice[0]]);
-			}
 			// Print Verboso ou não
 			if (flag_output == 'v') {
 				analisaSplay(nodes[indice[0]]);

@@ -1,20 +1,16 @@
 #include "lct.h"
 #include <stdio.h>
 
-static int valor;
-
 // Funções auxiliares do access
 static void removePreferredChild(Node);
 static void switchPreferredChild(Node, Node);
 
 void lctInit() {
-	valor = 0;
+	splayInit();
 }
 
 Node maketree() {
-	// if (chave == 'Z') chave = 'a';
-	return newNode(valor++, NULL, NULL, NULL, NULL, 0, 0);
-
+	return makeSplay();
 }
 
 /*  removePreferredChild(Node v)
@@ -35,21 +31,30 @@ Node maketree() {
 	//    1:0
 	//  2:1
 */
+// É chamado depois de access(v), ou seja, v->bit = 0
 static void removePreferredChild(Node v) {
-	if (v->children[1 - v->bit] != NULL) {
-		v->children[1 - v->bit]->pathParent = v;
-		v->children[1 - v->bit]->parent = NULL;
+	/*/ Imaginando que:
+	//		v
+	//		 \
+	//		  w
+	*/
+	if (v->children[1] != NULL) {
+		// Tô falando que o w terá pathParent para v???
+		v->children[1]->pathParent = v;
+		v->children[1]->parent = NULL;
 	}
-	v->children[1 - v->bit] = NULL;
+	v->children[1] = NULL;
 }
-
+// É chamado depois de access(w), ou seja, w->bit = 0
 static void switchPreferredChild(Node w, Node v) {
-	if (w->children[1 - w->bit] != NULL) {
-		w->children[1 - w->bit]->pathParent = v;
-		w->children[1 - w->bit]->parent = NULL;
+	if (w->children[1] != NULL) {
+		w->children[1]->pathParent = v;
+		w->children[1]->parent = NULL;
 	}
-	w->children[1 - w->bit] = v;
-	v->parent = w;
+	join(v, w);
+	// equivale a:
+	// w->children[1] = v;
+	// v->parent = w;
 	v->pathParent = NULL;
 }
 
@@ -94,50 +99,58 @@ void access(Node v) {
 }
 
 
-// v e w estão em árvores distintas e v é a raiz da sua árvore (da represented tree, não necessariamente da Splay Tree);
-// junta as árvores de v e w, acrescentando a aresta v->w, fazendo w pai de v (ou v filho de w).
+// v e w estão em árvores distintas
+// junta as árvores de v e w, acrescentando a aresta v->w, Fazendo v filho direito de w na splay tree (auxiliary tree) -- v é mais profundo do que w, logo v é pai de w na LCT (represented tree)
 void link(Node v, Node w) {
+	// V SE TORNA RAIZ DA LCT ao qual faz parte
 	evert(v);
+
 	access(w);
 	// O ACCESS ME DARIA O BIT DE W = 0
-	w->children[1 - w->bit] = v;
-	v->parent = w;
+
+	// Faça v filho direito de w na splay tree (auxiliary tree) -- v é mais profundo do que w, logo v é pai de w na represented tree (lct)
+	join(v, w);
+	// equivale a:
+	// w->children[1] = v;
+	// v->parent = w;
 }
 
+
+// DESSE MODO O EVERT SÓ MUDA O NODE V COMO SENDO HEAD
 //Modifica a LCT que contém v para que v torne-se a raiz desta LCT
 // Muda a profundidade, dos vértices de v até a LCT. Para que v seja a raiz da LCT, tendo profundidade zero.
 void evert(Node v) {
+	// Com access ele se torna raiz da splay tree
 	access(v);
-	//nó v é a raiz da LCT
+	// O que torna possível alterar os bits
 
 	//reverte o bit
 	//https://www.cs.cmu.edu/~sleator/papers/dynamic-trees.pdf
 	// page 372
 
-	// CRIAR A ROTINA INVERTE QUE INVERTE O BIT NA SPLAY
-	v->bit = 1 - v->bit;
+	// ROTINA INVERTE QUE INVERTE O BIT NA SPLAY
+	reflectBit(v);
+}
+
+Node findRootSemAccess(Node v) {
+	Node m = minimumSemMudanca(v);
+	return m;
 }
 
 Node findRoot(Node v) {
 	access(v);
-	Node r = minimum(v);
-	splay(r);
-	return r;
+	Node m = casquinhaMin(v);
+	return m;
 }
 
-//pré-condição: v não é uma raiz da lct; remove a aresta v->parent(v).
+//pré-condição: v não é uma raiz da lct; remove a aresta de v com seu pai naLCT
 void cut(Node v) {
-	if (findRoot(v) == v) return;
-
 	//acesso v, e v se torna raiz na sua splay tree
+	// Quando eu dou access em v, eu tenho a garantia de que o filho direito de v é NULL na splay tree
 	access(v);
 
-
-
-	// SE FIZERMOS A ALTERAÇÃO NO SPLAY DO PUSHBITDOWN, ESSE PUSHBITDOWN SOME
-	// para garantir que o bit dele vá para o filho, se for 1
-	// pushBitDown(v);
-
-	//realizo o split no pai do v, porque v->parent é menos profundo do que v, portanto v cai para o lado greater
-	split(maximum(v->children[0]));
+	//realizo o split no pai do v, porque o pai de v é menos profundo do que v, portanto v cai para o lado greater
+	Node m = casquinhaMax(v->children[0]);
+	split(m);
+	// split(maximum(v->children[0]));
 }

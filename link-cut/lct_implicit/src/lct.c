@@ -96,6 +96,7 @@ void access(Node v) {
 	}
 	//v é raiz da splay tree do preferred path
 	// SE ADICIONAR O PUSHBITDOWN NO FINAL DO SPLAY, INVARIANTE: O BIT DE V É ZERO AO FINAL DO ACCESS
+	// o bit da raiz é sempre zero
 }
 
 
@@ -117,21 +118,23 @@ void link(Node v, Node w) {
 
 
 // DESSE MODO O EVERT SÓ MUDA O NODE V COMO SENDO HEAD
-//Modifica a LCT que contém v para que v torne-se a raiz desta LCT
+// Modifica a LCT que contém v para que v torne-se a raiz desta LCT
 // Muda a profundidade, dos vértices de v até a LCT. Para que v seja a raiz da LCT, tendo profundidade zero.
 void evert(Node v) {
-	// Com access ele se torna raiz da splay tree
+	// Com access ele se torna raiz da splay tree e sem filho direito
 	access(v);
-	// O que torna possível alterar os bits
+	// O que torna possível alterar o bit, para que o filho esquerdo se torne o filho direito, fazendo com que v seja raiz da LCT
 
 	//reverte o bit
 	//https://www.cs.cmu.edu/~sleator/papers/dynamic-trees.pdf
 	// page 372
 
 	// ROTINA INVERTE QUE INVERTE O BIT NA SPLAY
-	reflectBit(v);
+	// ACREDITO QUE ESSA ROTINA TINHA QUE PROPAGAR O BIT PARA BAIXO
+	reflectTree(v);
 }
 
+// Operação dumb que só mostra qual é a raiz da árvore, sem mexer nela.
 Node findRootSemAccess(Node v) {
 	Node m = minimumSemMudanca(v);
 	return m;
@@ -139,7 +142,7 @@ Node findRootSemAccess(Node v) {
 
 Node findRoot(Node v) {
 	access(v);
-	Node m = casquinhaMin(v);
+	Node m = minSplay(v);
 	return m;
 }
 
@@ -150,7 +153,6 @@ void cut(Node v) {
 	access(v);
 
 	//realizo o split no pai do v, porque o pai de v é menos profundo do que v, portanto v cai para o lado greater
-	Node m = casquinhaMax(v->children[0]);
+	Node m = maxSplay(v->children[0]);
 	split(m);
-	// split(maximum(v->children[0]));
 }

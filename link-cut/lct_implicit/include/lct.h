@@ -22,8 +22,6 @@ void access(Node);
 Node findRoot(Node);
 
 
-
-
 //Operação: Enraiza a árvore que contém o nó v no próprio nó v
 void evert(Node);
 

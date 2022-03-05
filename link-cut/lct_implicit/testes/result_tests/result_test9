@@ -36,17 +36,17 @@ Preferred Path:
 Sobre o 7
 7->pathParent: 6
 Preferred Path: 
-7 -> 9 -> 8 -> 
+7 -> 8 -> 9 -> 
 
 Sobre o 8
 8->pathParent: Eh null
 Preferred Path: 
-7 -> 9 -> 8 -> 
+7 -> 8 -> 9 -> 
 
 Sobre o 9
 9->pathParent: Eh null
 Preferred Path: 
-7 -> 9 -> 8 -> 
+7 -> 8 -> 9 -> 
 
 Sobre o 10
 10->pathParent: 7

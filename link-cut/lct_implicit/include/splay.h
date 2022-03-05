@@ -7,13 +7,13 @@ void splayInit();
 Node makeSplay();
 void join(Node, Node);
 void splay(Node);
-void printSPLAY(Node, int);
-Node* split(Node);
-Node casquinhaMax(Node);
-Node casquinhaMin(Node);
-void reflectBit(Node);
-void pushBitDown(Node);
+void split(Node);
+Node maxSplay(Node);
+Node minSplay(Node);
+void reflectTree(Node);
 
+
+void printSPLAY(Node, int);
 // Operação dumb Serve apenas para o print
 Node minimumSemMudanca(Node);
 #endif

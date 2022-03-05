@@ -5,9 +5,7 @@
 // children[1] == right
 // children[0] == left
 static int valor;
-static int   bit = 1;
 static Node  root; 				/*root of Splay Tree*/
-static Node  split_roots[2];
 
 static Node sibling(Node);
 
@@ -15,7 +13,7 @@ static void swapChildren(Node);
 
 static void pushBitUp(Node);
 
-// static void pushBitDown(Node);
+static void pushBitDown(Node);
 
 static void  rotate(Node);
 
@@ -32,23 +30,37 @@ Node makeSplay() {
 	return newNode(valor++, NULL, NULL, NULL, NULL, 0, 0);
 }
 
-void reflectBit(Node v) {
-	Node w;
-	if (v->children[1] != NULL)	w = v->children[1];
+// Uso essa rotina no evert
+// O objetivo dessa rotina é alterar o bit de v, para que indique que os filhos serão invertidos.
+// Ou seja:
+//
+//      9:0             7:0
+//    8:0       ===>>       9:0
+//  7:1                   8:0
+//
+// Porém, é preciso com que se realize o pushbitDown, para que se mantenha a ordem correta na árvore
+// Assim, o bit irá se propagar pela árvore
+//
+//      9:0         7:0               7:0             7:0
+//    8:0     ===>>     9:0   ===>>     8:0   ===>>     8:0
+//  7:1               8:1                 9:1             9:0
+//
+void reflectTree(Node v) {
 	v->bit = 1 - v->bit;
-	if (v->children[1] != NULL) reflectBit(w);
+	pushBitDown(v); // para que a raiz da LCT fique com o bit zero
 }
 
+// A prinxípio w não tem filho direito (w->children[1] == NULL)
 void join(Node v, Node w) {
 	w->children[1] = v;
 	v->parent = w;
 }
 
 
-Node* split(Node x) {
-	Node S, T;
-
-	// Preciso desse splay aqui, para que x seja a raiz e tenha filhos. Senão, caso x seja uma folha, de nada adiantará essa operação.
+// Na splay: Separo o nó x de seus filhos direitos, o que significa que estou separando x e o nó direito que é mais profundo.
+// Ou seja, na LCT estou cortando o vínculo de x com seu pai
+void split(Node x) {
+	Node T;
 
 	T = x->children[1 - x->bit];
 	if (T != NULL) {
@@ -58,12 +70,6 @@ Node* split(Node x) {
 		T->bit ^= x->bit;
 	}
 	x->children[1 - x->bit] = NULL;
-	S = x;
-
-	split_roots[0] = S;
-	split_roots[1] = T;
-
-	return split_roots;
 }
 
 
@@ -141,7 +147,7 @@ Node minimumSemMudanca(Node x) {
 	return minimumSemMudanca(x->children[x->bit]);
 }
 
-Node casquinhaMin(Node x) {
+Node minSplay(Node x) {
 	Node m = minimum(x);
 	splay(m);
 	return m;
@@ -158,7 +164,7 @@ static Node minimum(Node x) {
 
 
 
-Node casquinhaMax(Node x) {
+Node maxSplay(Node x) {
 	Node m = maximum(x);
 	splay(m);
 	return m;
@@ -194,7 +200,7 @@ static void pushBitUp(Node x) {
 }
 
 
-void pushBitDown(Node x) {
+static void pushBitDown(Node x) {
 	if (x->bit == 1) {
 		printf("--------------\n");
 		printf("pushBitDown(%d) com bit 1\n", x->val);

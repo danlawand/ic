@@ -1,0 +1,30 @@
+Splay tree é uma árvore binária de busca (ABB) com a propriedade de ser autoajustável, em que o último elemento acessado se torna a raiz da árvore. Existem diferentes tipos de implementação, mas para o propósito deste trabalho utilizaremos a(s) seguinte(s) interface(s):  
+
+% \begin{lstlisting}
+% // splay.h
+% void  splay(Node);
+% void  printSPLAY(Node, int);
+% Node* split(Node);
+% Node  maximum(Node);
+% Node  minimum(Node);
+% void  pushBitDown(Node);
+% \end{lstlisting}
+
+
+\begin{verbatim}
+// splay.h
+void  splay(Node);
+void  printSPLAY(Node, int);
+Node* split(Node);
+Node  maximum(Node);
+Node  minimum(Node);
+void  pushBitDown(Node);
+\end{verbatim}
+
+Note que os nós (\texttt{Node}) não tem campo chave (\texttt{Key}), tratando-se de uma ABB com chaves implícitas, ou seja, não utilizamos as chaves para realizar qualquer tipo de operação. Em uma splay tree tradicional, as chaves da sub-árvore esquerda são menores do que a de seu pai e as chaves da sub-árvore direita são maiores do que a de seu pai, e para encontrar determinado nó, passamos a chave como argumento. No nosso caso, as rotinas que usamos na link-cut-tree, se utilizam diretamente dos ponteiros aos nós, descartando a utilidade de realizar operações de buscas pela chave para encontrar aos nós, por isso nossa splay tree possui chaves implícitas. Além disso, trabalhamos com a profundidade dos nós, ou seja, em relação ao pai do nó, os nós que estão à esquerda são menos profundos (mais superficiais) e os nós que estão à direita são mais profundos.  
+
+Nessa implementação, as inserções dos nós em uma splay tree ocorrem de maneira diferente do que a tradicional, sem necessidade de usar chaves. Fizemos com que operação de inserção ocorresse na rotina \textit{link} das link-cut tree, mas para mostrar a consistência da operação descreveremos brevemente como a inserção funciona na splay tree do nosso caso.  
+
+Seja o nó \textbf{\textit{v}} raiz de uma splay tree e \textbf{\textit{w}} um nó qualquer sem filhos esquerdos, queremos tornar \textbf{\textit{w}} mais profundo do que \textbf{\textit{v}}. Para isso, faremos com que \textbf{\textit{v}} seja filho esquerdo de \textbf{\textit{w}}. Desta forma, como os filhos esquerdos são menos profundos que seu pai, preservamos a propriedade de que \textbf{\textit{v}} e seus filhos sejam menos profundos do que \textbf{\textit{w}}.  
+
+A rotina \textit{splay} é a rotina principal que nos fez escolher as splay tree como árvores auxiliares para construir as link-cut tree, pois, como veremos a frente, ela auxilia na rotina \textit{access} que é a base para as operações \textit{link} e \textit{cut} da link-cut tree.  

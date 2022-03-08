@@ -1,6 +1,6 @@
-O objetivo deste projeto é o estudo e implementação de estruturas de dados e algoritmos 
+\textcolor{red}{O objetivo deste projeto é o estudo e implementação de estruturas de dados e algoritmos 
 para problemas de conexidade em grafos num contexto onde o grafo pode sofrer 
-modificações~\cite{DemetrescuFI2004}.  
+modificações~\cite{DemetrescuFI2004}.}  
 
 O problema central será o de manter informações sobre as componentes conexas do grafo, 
 ou mais exatamente, o problema de responder eficientemente consultas do tipo: 
@@ -52,7 +52,7 @@ sofrendo remoções de arestas.
 \newcommand{\FindSet}{\mbox{\sc FindSet}}
 
 Para conexidade totalmente dinâmica em florestas com $n$ vértices, 
-podemos usar uma coleção das chamadas \emph{link-cut trees}~\cite{SleatorT1983} ou 
+podemos usar uma coleção das chamadas \emph{Link-cut trees}~\cite{SleatorT1983} ou 
 das chamadas \emph{Euler tour trees}~\cite{HenzingerK1995} para representar a floresta.  
 Estas estruturas implementam uma rotina chamada $\FindRoot(x)$, 
 semelhante à rotina $\FindSet(x)$ do union-find, que devolve 
@@ -61,14 +61,23 @@ Com isso, podemos responder às consultas facilmente, pois dois vértices $x$ e 
 estão na mesma componente da floresta se e somente se $\FindRoot(x) = \FindRoot(y)$.
 O tempo amortizado de atualização e consulta é $\Oh(\lg n)$.
 
+\textcolor{red}{Para conexidade totalmente dinâmica em florestas com $n$ vértices, 
+podemos usar uma coleção das chamadas \emph{Link-cut trees}~\cite{SleatorT1983} para representar a floresta.  
+Esta estrutura implementa uma rotina chamada $\FindRoot(x)$, 
+semelhante à rotina $\FindSet(x)$ do union-find, que devolve 
+um representante da componente em que o vértice $x$ se encontra. 
+Com isso, podemos responder às consultas facilmente, pois dois vértices $x$ e $y$ 
+estão na mesma componente da floresta se e somente se $\FindRoot(x) = \FindRoot(y)$.
+O tempo amortizado de atualização e consulta é $\Oh(\lg n)$.}\textcolor{green}{Parágrafo igual ao de cima, porém retirei apenas a referência às Euler tour trees}
+
 Para o caso geral da conexidade totalmente dinâmica, podemos representar um grafo arbitrário  
 por uma floresta geradora maximal do grafo.  Se chamarmos uma tal floresta de $F$, podemos 
-usar por exemplo Euler tour trees para armazená-la.  Com isso, inserções e consultas 
+usar por exemplo \emph{Euler tour trees} para armazená-la.  Com isso, inserções e consultas 
 podem ser implementadas diretamente usando as operações correspondentes destas árvores.  
 Por outro lado, as remoções são mais desafiadoras.  Em especial, se a aresta removida fizer
 parte da floresta $F$, isso pode requerer encontrar, de forma eficiente, uma outra aresta 
-do grafo para ser adicionada a~$F$.  Esta operação é implementada por meio de uma estrutura
-de dados mais complexa, que planejamos estudar também, como parte deste projeto~\cite{DemaineL2007}. 
+do grafo para ser adicionada a~$F$. Esta operação é implementada por meio de uma estrutura
+de dados mais complexa, que planejamos estudar também, como parte deste projeto~\cite{DemaineL2007}.\textcolor{red}{Não sei o que fazer com esse parágrafo}. 
 
 
 \newpage

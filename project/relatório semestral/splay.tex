@@ -13,13 +13,13 @@ Splay tree é uma árvore binária de busca (ABB) com a propriedade de ser autoa
 
 
 \begin{itemize}
-    \item \texttt{makeSplay()}: rotina em que retorna a raíz de uma splay tree com apenas um nó, tendo limite de tempo de $O(1)$.  
-    \item \texttt{splay(v)}: rotina em que recebe um nó \texttt{v}, tronando-o raíz da splay tree, com complexidade de $O(log_2 n)$ em tempo.  
-    \item \texttt{join(v, w)}: rotina em que recebe duas splay trees, \texttt{v} e \texttt{w}, fazendo com que \texttt{v} seja filho direito de \texttt{w}.  \textcolor{red}{(Coloco a seguinte parte?) Sabe-se que de início \texttt{w} não tem filho direito.} Tal rotina tem complexidade $O(1)$ em tempo.  
-    \item \texttt{split(v)}: rotina em que recebe o nó \texttt{v} de uma splay tree e o separa de seu filho direito, gerando uma nova splay tree enraizada no filho direito de \texttt{v}. A complexidade dessa rotina em tempo leva $O(1)$.  
-    \item \texttt{Node maxSplay(v)}: rotina em que retorna o nó mais profundo da splay tree em que \texttt{v} pertence, tendo complexidade de $O(log_2 n)$ em tempo.  
-    \item \texttt{Node minSplay(v)}: rotina em que retorna o nó menos profundo da splay tree em que \texttt{v} pertence, tendo complexidade de $O(log_2 n)$ em tempo.  
-    \item \texttt{void reflectTree(v)}: rotina em que inverte reciprocamente o filho direito com o esquerdo, tendo complexidade $O(1)$ em tempo.  
+    \item \texttt{makeSplay()}: retorna a raíz de uma splay tree com apenas um nó, tendo limite de tempo de $O(1)$.  
+    \item \texttt{splay(v)}: recebe um nó \texttt{v}, tornando-o raíz da splay tree, com complexidade de $O(log_2 n)$ em tempo.  
+    \item \texttt{join(v, w)}: recebe duas splay trees, \texttt{v} e \texttt{w}, fazendo com que \texttt{v} seja filho direito de \texttt{w}.  \textcolor{red}{(Coloco a seguinte parte?) Sabe-se que de início \texttt{w} não tem filho direito.} Tal rotina tem complexidade $O(1)$ em tempo.  
+    \item \texttt{split(v)}: recebe o nó \texttt{v} de uma splay tree e o separa de seu filho direito, gerando uma nova splay tree enraizada no filho direito de \texttt{v}. A complexidade dessa rotina em tempo leva $O(1)$.  
+    \item \texttt{maxSplay(v)}: retorna o nó mais profundo da splay tree em que \texttt{v} pertence, tendo complexidade de $O(log_2 n)$ em tempo.  
+    \item \texttt{minSplay(v)}: retorna o nó menos profundo da splay tree em que \texttt{v} pertence, tendo complexidade de $O(log_2 n)$ em tempo.  
+    \item \texttt{reflectTree(v)}: rotina em que inverte reciprocamente o filho direito com o esquerdo, tendo complexidade $O(1)$ em tempo.  
 
 
 \end{itemize}

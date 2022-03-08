@@ -1,5 +1,6 @@
 \begin{thebibliography}{1}
 
+
 \bibitem{DemaineHJSI2012}
 E.~Demaine, J.~Holmgren (scriber), J.~Jian (scriber), M.~Stepanenko (scriber),
   and M.~Ishaque (scriber).
@@ -49,5 +50,10 @@ D.~D. Sleator and R.~E. Tarjan.
 R.~E. Tarjan.
 \newblock Efficiency of a good but not linear set union algorithm.
 \newblock {\em Journal of the ACM}, 22(2):215--225, 1975.
+
+\bibitem{WikipediaLCT}
+Wikipedia.
+\newblock Link Cut Tree.
+\newblock Wikipedia Description.
 
 \end{thebibliography}

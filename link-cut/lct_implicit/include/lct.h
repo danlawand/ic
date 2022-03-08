@@ -18,7 +18,7 @@ void link(Node, Node);
 void access(Node);
 
 
-//Operação: devolve a raiz da árvore que contém v.
+//Operação: devolve a raiz da LCT que contém v.
 Node findRoot(Node);
 
 

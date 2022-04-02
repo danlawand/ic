@@ -52,8 +52,8 @@ void reflectTree(Node v) {
 
 // A prinxípio w não tem filho direito (w->children[1] == NULL)
 void join(Node v, Node w) {
-	w->children[1] = v;
-	v->parent = w;
+	v->children[1] = w;
+	w->parent = v;
 }
 
 

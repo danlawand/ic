@@ -102,6 +102,7 @@ void access(Node v) {
 
 // v e w estão em árvores distintas
 // junta as árvores de v e w, acrescentando a aresta v->w, Fazendo v filho direito de w na splay tree (auxiliary tree) -- v é mais profundo do que w, logo v é pai de w na LCT (represented tree)
+// Porque não faço evert em w? Pq não preciso que w seja raiz da LCT dele. Mas preciso que v seja. Porque afinal, v será raiz da LCT, e se ele não for raiz da LCT antes, dará  ruim
 void link(Node v, Node w) {
 	// V SE TORNA RAIZ DA LCT ao qual faz parte
 	evert(v);
@@ -110,7 +111,7 @@ void link(Node v, Node w) {
 	// O ACCESS ME DARIA O BIT DE W = 0
 
 	// Faça v filho direito de w na splay tree (auxiliary tree) -- v é mais profundo do que w, logo v é pai de w na represented tree (lct)
-	join(v, w);
+	join(w, v);
 	// equivale a:
 	// w->children[1] = v;
 	// v->parent = w;
@@ -140,7 +141,7 @@ Node findRootSemAccess(Node v) {
 	return m;
 }
 
-Node findRoot(Node v) {
+Node findroot(Node v) {
 	access(v);
 	Node m = minSplay(v);
 	return m;

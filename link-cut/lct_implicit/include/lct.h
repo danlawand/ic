@@ -19,7 +19,7 @@ void access(Node);
 
 
 //Operação: devolve a raiz da LCT que contém v.
-Node findRoot(Node);
+Node findroot(Node);
 
 
 //Operação: Enraiza a árvore que contém o nó v no próprio nó v

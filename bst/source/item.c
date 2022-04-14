@@ -4,6 +4,10 @@
 
 int compareKeys(Key k1, Key k2) {
 	return k1 - k2;
+	// strcmp(str1,str2)
+	// == 0 -> iguais
+	// > 0 -> str1 > str2
+	// < 0 str1 < str2
 }
 
 void printValue(Value val) {
